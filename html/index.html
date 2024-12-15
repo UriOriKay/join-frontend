@@ -1,0 +1,62 @@
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join</title>
+  <link rel="icon" type="image/x-icon" href="../assets/img/favIcon.svg">
+  <link rel="stylesheet" href="../css/general.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/header.css" />
+  <link rel="stylesheet" href="../css/style-login.css" />
+  <script src="../elements/element.class.js"></script>
+  <script src="../elements/div.class.js"></script>
+  <script src="../elements/label.class.js"></script>
+  <script src="../elements/checkbox.class.js"></script>
+  <script src="../elements/button.class.js"></script>
+  <script src="../elements/img.class.js"></script>
+  <script src="../elements/span.class.js"></script>
+  <script src="../elements/input.class.js"></script>
+  <script src="../elements/anchor.class.js"></script>
+  <script src="../js/resetVariables.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../models/confirmation.class.js"></script>
+  <script src="../models/menuLink.class.js"></script>
+  <script src="../models/BackBtn.class.js"></script>
+  <script src="../models/labeldiv.class.js"></script>
+  <script src="../models/customCheckbox.class.js"></script>
+  <script src="../models/divInputImg.class.js"></script>
+
+
+  <script src="../js/login.js"></script>
+</head>
+
+<body onload="initLogin()">
+  <div id="start-con" class="start-animation">
+    <img id="login-img" class="start-animation" src="../assets/img/logo-big.png">
+  </div>
+  <div class="main-site">
+    <main id="login-main">
+      <img id="logo-login" src="../assets/img/Logo-middle_blue.png" alt="" />
+      <div id="button-group">
+        <span>Not a Join user?</span>
+        <button onclick='renderLoginElements("Sign up")' class="button font-t5">
+          <span>Sign up</span>
+        </button>
+      </div>
+      <div id="login-item">
+        <h1 id="login-headline">Log in</h1>
+        <form id="login-form" onsubmit='loginUser("Login"); return false'>
+          <div id="inputs-con" class="content-con">
+          </div>
+          <div id="login-form-button-group" class="row">
+          </div>
+        </form>
+
+      </div>
+      <div id="login-link-group" class="row link-group"></div>
+    </main>
+  </div>
+</body>
+
+</html>

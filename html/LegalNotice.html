@@ -1,0 +1,157 @@
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join</title>
+  <link rel="icon" type="image/x-icon" href="../assets/img/favIcon.svg" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../css/general.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/header.css" />
+  <link rel="stylesheet" href="../css/help.css" />
+  <script src="../js/resetVariables.js"></script>
+  <script src="../elements/element.class.js"></script>
+  <script src="../elements/div.class.js"></script>
+  <script src="../elements/anchor.class.js"></script>
+  <script src="../elements/img.class.js"></script>
+  <script src="../elements/span.class.js"></script>
+  <script src="../elements/unorderedList.class.js"></script>
+  <script src="../elements/listElement.class.js"></script>
+  <script src="../models/header.class.js"></script>
+  <script src="../models/menuLink.class.js"></script>
+  <script src="../js/storage.js"></script>
+</head>
+
+<body onload="init()">
+  <header id="header-div"></header>
+  <div class="main-site">
+    <main>
+      <div class="spaceBetween">
+        <h1>Legal Notice</h1>
+        <button class="signup-back-btn" onclick="window.history.go(-1); return false;">
+          <img src="../assets/img/icon-arrow-left-line-blue.png" alt="" />
+        </button>
+      </div>
+      <div class="legal-content">
+        <div class="list">
+          <span class="marker-list">Imprint</span>
+          <div class="list">
+            <ul>
+              <li>Kay Schumacher.</li>
+              <!-- <li>
+                  Students of
+                  <span class="highlight">Developer Akademie GmbH</span>
+                </li> -->
+              <li>Sterndamm 42, 12487 Berlin</li>
+            </ul>
+            <div>
+              <span class="headline">Exploring the Board</span>
+              <span>
+                Email:
+                <a class="highlight" href="mailto:Kay@uriori.de">Kay Schumacher</a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="headline">Acceptance of terms</span>
+          <p class="font-body">
+            By accessing and using
+            <span class="highlight">Join</span> (Product), you acknowledge and
+            agree to the following terms and conditions, and any policies,
+            guidelines, or amendments thereto that may be presented to you
+            from time to time. We, the listed students, may update or change
+            the terms and conditions from time to time without notice.
+          </p>
+        </div>
+        <div>
+          <span class="headline">Scope and ownership of the product</span>
+          <p class="font-body">
+            <span class="highlight">Join</span> has been developed as part of
+            a student group project in a web development bootcamp at the
+            <span class="highlight">Developer Akademie GmbH</span>. It has an
+            educational purpose and is not intended for extensive personal &
+            business usage. As such, we cannot guarantee consistent
+            availability, reliability, accuracy, or any other aspect of
+            quality regarding this Product. <br />
+            <br />
+            The design of <span class="highlight">Join</span> is owned by the
+            <span class="highlight">Developer Akademie GmbH</span>.
+            Unauthorized use, reproduction, modification, distribution, or
+            replication of the design is strictly prohibited.
+          </p>
+        </div>
+        <div>
+          <span class="headline">Proprietary rights</span>
+          <p class="font-body">
+            Aside from the design owned by
+            <span class="highlight">Developer Akademie GmbH </span>, we, the
+            listed students, retain all proprietary rights in
+            <span class="highlight">Join</span>, including any associated
+            copyrighted material, trademarks, and other proprietary
+            information.
+          </p>
+        </div>
+        <div>
+          <span class="headline">Use of the product</span>
+          <p class="font-body">
+            <span class="highlight">Join</span> is intended to be used for
+            lawful purposes only, in accordance with all applicable laws and
+            regulations. Any use of <span class="highlight">Join</span> for
+            illegal activities, or to harass, harm, threaten, or intimidate
+            another person, is strictly prohibited. You are solely responsible
+            for your interactions with other users of
+            <span class="highlight">Join</span>.
+          </p>
+        </div>
+        <div>
+          <span class="headline">Disclaimer of warranties and limitation of liability</span>
+          <p class="font-body">
+            <span class="highlight">Join</span> is provided "as is" without
+            warranty of any kind, whether express or implied, including but
+            not limited to the implied warranties of merchantability, fitness
+            for a particular purpose, and non-infringement. In no event will
+            we, the listed students, or the
+            <span class="highlight">Developer Akademie</span>, be liable for
+            any direct, indirect, incidental, special, consequential or
+            exemplary damages, including but not limited to, damages for loss
+            of profits, goodwill, use, data, or other intangible losses, even
+            if we have been advised of the possibility of such damages,
+            arising out of or in connection with the use or performance of
+            <span class="highlight">Join</span>.
+          </p>
+        </div>
+        <div>
+          <span class="headline">Indemnity</span>
+          <p class="font-body">
+            You agree to indemnify, defend and hold harmless us, the listed
+            students, the
+            <span class="highlight">Developer Akademie</span>, and our
+            affiliates, partners, officers, directors, agents, and employees,
+            from and against any claim, demand, loss, damage, cost, or
+            liability (including reasonable legal fees) arising out of or
+            relating to your use of <span class="highlight">Join</span> and/or
+            your breach of this Legal Notice.
+          </p>
+          <br />
+          <br />
+          <p>
+            For any questions or notices, please contact us at
+            <a class="highlight" href="mailto:Kay@uriori.de">Kay Schumacher</a>.
+            <br />
+            <br />
+            Date: November 04, 2024
+          </p>
+        </div>
+      </div>
+    </main>
+    <nav id="navbar" class="vertical-menu"></nav>
+  </div>
+</body>
+
+</html>

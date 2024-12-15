@@ -1,0 +1,260 @@
+#edit-contact-overlay {
+  position: absolute;
+  right: 0;
+  width: fit-content;
+  display: inline-flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  /* gap: 72px; */
+  border-radius: 30px 0px 30px 30px;
+  background-color: var(--white);
+  color: var(--white, #fff);
+  /* nuevo */
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
+
+  animation-name: fadingRight;
+
+}
+.edit-contact-overlay-header {
+  border-radius: 30px 0px 0px 0px;
+  display: flex;
+  width: 584px;
+  padding: 5% 46px;
+  /* padding: 91px 46px; */
+  flex: 0.5 4 232px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1%; /* 12px */
+  background-color: var(--primary);
+}
+.edit-contact-overlay-header h1 {
+  /* font-family: Open Sans; */
+  font-size: 3rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 3.6rem */
+}
+
+#edit-contact-con-overlay {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 50%;
+}
+
+.edit-contact-overlay-header img {
+  width: 55.123px;
+  height: 66.483px;
+}
+.edit-contacts-con {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10vh;
+  margin-bottom: 16px;
+  flex: 4 1;
+}
+
+#inputs-con input:not([type="checkbox"]) {
+  display: flex;
+  width: 300px;
+  height: 48px;
+  /* padding: 12px 21px; */
+  align-items: center;
+  gap: 1%;
+  align-self: stretch;
+  border: none;
+}
+
+.content-con {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.edit-contacts-con .row {
+  position: relative;
+  width: 100%;
+  line-height: 28px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 35px;
+  margin-left: 0;
+}
+
+#edit-contact-button-group {
+  display: flex;
+  align-items: flex-start;
+}
+.button {
+  min-width: 150px;
+  width: fit-content;
+  height: 48px;
+}
+
+.close-btn {
+  position: absolute;
+  display: flex;
+  padding: 4px;
+  gap: 10px;
+  right: 24px;
+  top: 24px;
+  width: 24px;
+  height: 24px;
+  background: var(--grey);
+  background-color: transparent;
+  font-size: 24px;
+  border: none;
+  font-family: "Open Sans", sans-serif;
+  border-radius: 53px;
+  color: var(--white);
+}
+
+#edit-contact-con-overlay .profile-badge {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  font-size: 36px;
+}
+
+#overlay-contacts {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  display: none;
+  height: 100svh;
+  z-index: 1;
+  top: 0;
+  right: 0;
+}
+
+#edit-contact-con-overlay {
+  margin-top: 10%;
+}
+
+/* .unset{
+  left: unset;
+} */
+
+@media (max-width: 1023px) {
+  .button {
+    min-width: 150px;
+    width: 173px;
+  }
+}
+@media (max-width: 767px) {
+  #overlay-contacts {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    /* display: flex; */
+    height: 100svh;
+    z-index: 2;
+  }
+
+  /* .unset{
+    left: 25%;
+  } */
+
+ 
+  #edit-contact-overlay {
+    /* left: 25%, !important; */
+    /* right: 25%; */
+    width: 364px;
+    /* width: 584px; */
+    position: absolute;
+    border-radius: 1.875rem;
+    background: #fff;
+    padding-bottom: 16px;
+    /* nuevo */
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
+  }
+  .edit-contact-overlay-header {
+    width: 100%;
+    border-radius: 30px 30px 0px 0px;
+  }
+
+  #edit-contacts-con {
+    display: flex;
+    align-items: center;
+  }
+
+  #edit-contact-con-overlay {
+    /* margin-top: -20%; */
+    margin-bottom: 0;
+
+  }
+
+  .edit-contact-overlay-header h1 {
+    color: var(--white, #fff);
+    font-family: "Inter";
+    font-size: calc(1.375rem + 1.5vw);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 3.525rem */
+  }
+  #overlay-secondary-btn {
+    display: none;
+  }
+
+  .content-con {
+    display: flex;
+    align-items: center;
+    width: 90%;
+  }
+
+  #inputs-con input:not([type="checkbox"]) {
+    width: 100%;
+  }
+}
+
+@media (max-width: 423px) {
+
+  .edit-contact-overlay-header {
+    width: 100%;
+  }
+ 
+  #edit-contact-overlay {
+    width: 100%;
+  }
+
+#edit-contact-con-overlay {
+  margin-top: -14%;
+  margin-bottom: 0;
+}
+
+.imput-img-div {
+  padding: 0;
+}
+
+#inputs-con input:not([type="checkbox"]){
+  width: unset;
+}
+
+ /*Add Button bearbeiten*/
+ .fixed {
+ 
+  /* display: flex; */
+  background-color: transparent;
+  width: fit-content;
+}
+
+.edit-contacts-con {
+  flex: 2 1;
+}
+
+}
+
+@media (max-height: 1023px){
+  #inputs-con input:not([type="checkbox"]) {
+    height: 24px;
+  }
+}

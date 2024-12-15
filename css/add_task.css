@@ -1,0 +1,334 @@
+.div-span {
+    display: flex;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.blue-border, .input-con:hover {
+    border-bottom-color:  #005DFF !important;
+}
+
+/* all width 100% */
+#contentbig, #assigned, #assigned-select, #Due-date,
+#taskName input, #Description, .textarea, #Due-date input,
+#category, #category-select, #subtask, .input-con,
+.input-con input, li input {
+    width: 100%;
+}
+
+#AddTaskMainCon {
+    align-items: flex-start;
+}
+
+#addtaskCon {
+    width: 518px;
+    height: calc(100% -10vh);
+    overflow: auto;
+    border-top-left-radius: 5%;
+    border-bottom-left-radius: 5%;
+    border-bottom-right-radius: 5%;
+}
+/* headline of Add Task */
+#taskHeadline {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
+
+#content-con, #contentbig {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+#content-con {
+    width: 90%;
+    margin: 0px 5% 35px 5%;
+}
+
+#contentbig {
+    gap: 8px;
+}
+
+#taskName input{
+    height: 50px;
+    font-size: 30px;
+    padding: 13px 16px;
+}
+
+.textarea {
+    height: 80px;
+    outline: none;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0 10px 10px 10px;
+    padding-top: 5px;
+    padding-left: 16px;
+    font-size: 19px;
+    line-height: 120%;
+}
+
+#Due-date input {
+    height: 50px;
+    padding: 0 10px;
+}
+
+#priority-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input-con  {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--grey);
+} 
+ 
+.input-con input {
+    display: flex;
+    align-items: center;
+    padding: 12px 21px;
+    gap: 1%;
+    align-self: stretch;
+    border: none;
+    outline: none;
+}
+
+.input-con img {
+    height: 10px;
+    width: 10px;
+    margin-right: 17px;
+    background-color: white;
+}
+
+#die-subtask {
+    background-color: white;
+}
+
+::-webkit-calendar-picker-indicator {
+    background-image: url('../assets/img/kalendar.png');
+  }
+.input-blue {
+    color: #4589FF;
+    font-size: 16px;
+}
+
+.urgency-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    padding: 10px 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
+    background-color: white;
+    border: none;
+    border-bottom: 2px solid transparent;
+    gap: 5px;
+}
+
+.urgency-img {
+    height: 15px;
+    width: 20px;
+}
+
+
+.btn-red {
+    --_activ: var(--activ, #FF3D00);
+}
+
+.btn-orange {
+    --_activ: var(--activ, #FFA800);
+}
+
+.btn-green {
+    --_activ: var(--activ, #7AE229);
+}
+
+.btn-red:hover, .btn-orange:hover, .btn-green:hover{
+    border-bottom: 2px solid;
+    border-bottom-color:var(--_activ);
+}
+
+.active img {
+    filter: brightness(0) invert(1);
+}
+
+.active {
+    background-color: var(--_activ);
+    color: white;
+}
+
+.tasks-contacts, .tasks-category {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 48px 5px 8px;
+    position: relative;
+}
+
+.tasks-contacts:hover, .tasks-category:hover, .list-element:hover, .list-element:hover input,
+.list-element img:hover, #subtask-img:hover, #img-check:hover, .list:hover::before, .list:hover, .list:hover input  {
+    background-color: #D2E3FF;
+}
+
+#contact-list-Parent {
+    height: 200px;
+    overflow: auto;
+}
+
+li input {
+    display: flex;
+    outline: none;
+    border: none;
+    align-items: center;
+}
+
+.list-element {
+    display: flex;
+    padding: 12px 10px 12px 29px;
+    align-items: center;
+}
+
+.subtask-element{
+    margin-right: 5px;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+
+}
+
+.list-element:hover img {
+    display: block;
+    /* content: url('../assets/img/logo-white.png'); */
+}
+
+.list-element img:hover {
+    filter: brightness(90%)
+}
+
+.list{
+    list-style-type: none;
+    position: relative;
+}
+
+.list::before {
+    content: '\2022'; /* das ist der Punkt*/
+    position: absolute;
+    font-size: 1.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: black;
+    padding: 7px 11px;
+}
+
+#associate-con, #department-con {
+    display: flex;
+}
+
+#subtask-img, #img-check, #subtasklist-img, #subtasklist-check-img, .sub-change-img {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.margin-10 {
+    margin-right: 10px !important;
+}
+
+.button-con {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    gap: 25px;
+    font-size: 23px;
+    height: 65px;
+}
+
+#add-task-btn:hover {
+    box-shadow: 0px 5px 10px var(--black20);
+}
+
+#taskName {
+    flex-direction: column;
+}
+
+.active-list {
+    background-color: var(--primary);
+    color: white;
+}
+
+.active-list input {
+    filter: brightness(0) invert(1);
+}
+
+.active-list:hover {
+cursor: pointer;
+background-color: var(--primary);
+}
+
+#clear-task{
+    height: 60px;
+}
+
+#main-bord-card-edit-1 {
+    position: absolute;
+    right: 103px;
+}
+
+@media (max-width: 1023px) {
+    .button-con {
+        position: unset;
+        justify-content: flex-end;
+        margin-right: 5%;
+        margin-bottom: 23px;
+    }
+
+    #clear-task, #add-task-btn{
+        width: 21%;
+        font-size: calc(13px + 10 * ((100vw - 320px) / 703));
+    }
+
+    #clear-task{
+        padding: 4px 4px;
+        min-width: unset;
+        height: 48px;
+    }
+
+    #add-task-btn:hover {
+        padding: 4px 0;
+    }
+
+    #clear-task:hover{
+        padding: 4px 2px;
+        min-width: unset;
+    }
+
+    #AddTaskMainCon {
+        align-items: center;
+    }
+
+    #addtaskcon {
+        width: 100%;
+    }
+
+    .urgency-span {
+        font-size: calc(13px + 9 * ((100vw - 320px) / 703));
+    }
+
+    .urgency-img {
+        height: calc(9px + 6 * ((100vw - 320px) / 703));
+        width: calc(11px + 9 * ((100vw - 320px) / 703));
+    }
+
+    #main-board-card {
+        width: 100%;
+        max-width: unset;
+    }
+
+    #main-bord-card-title {
+        font-size: calc(20px + 20 * ((100vw - 320px) / 703));
+    }
+}
