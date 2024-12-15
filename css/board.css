@@ -269,6 +269,11 @@ position: absolute;
     background-color: var(--secondary);
 }
 
+.bg-c{
+    display: flex;
+    align-items: center;
+}
+
 .noTask-div{
     display: flex;
     height: 48px;
