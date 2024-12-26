@@ -98,7 +98,11 @@ main {
   color: var(--white);
 }
 
-.link-group-a:hover{
+.link-group-b {
+  color: var(--primary);
+}
+
+.link-group-a:hover, .link-group-b:hover {
   color: var(--menuColor);
 }
 

@@ -26,7 +26,7 @@ class SummaryBox {
     this.renderPosition();
   }
 
-createFirstBox() {
+createFirstBox(summaryBox_div_id) {
   docID(`item-${summaryBox_div_id}-0`).innerHTML ="";
   new Div(`item-${summaryBox_div_id}-0`,`item-${summaryBox_div_id}-0-1`, "col");
   new Div(`item-${summaryBox_div_id}-0-1`, 'div-row', "row");

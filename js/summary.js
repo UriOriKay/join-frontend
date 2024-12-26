@@ -1,9 +1,6 @@
-let screen_size = 1023; //screenWidth of Window
-let item_amount = 6;
-let summaryBox_div_id = "summary-box";
-let summary_boxes = [];
-let new_number;
-let sum;
+let screen_size = 1023; //screenWidth of Window, needed for summary Boxes
+let item_amount = 6; //changeable nummber of boxes
+let summary_boxes = []; //array of summary boxes
 
 let descriptions = [
   "Tasks urgent",
@@ -25,92 +22,60 @@ let images = [
   "../assets/img/urgent_summary.png",
 ];
 
-/**
- * Initializes the summary.
- *
- * @return {Promise} A promise that resolves when the summary has been initialized.
- */
+// initiation of the summary site
 async function initSummary() {
-  await activeUser();
-  init();
-  await generateGreetingMessage();
-  task_amounts = await getSummaryItem("task/summary", active_user.token);
-  createSummaryBoxes();
-  setNavBarActive("summary-link");
+  let token = await activeUser(); //check if user is logged in
+  init(); //rencer Header and Navbar
+  await generateGreetingMessage(); //generate greeting message
+  response = await getItem("task/summary", token); //get task amounts
+  task_amounts = await response.json() //turn the tasks amounts in a JSON
+  createSummaryBoxes(); //create the summary boxes
+  setNavBarActive("summary-link"); // set summary in the navbar active
 }
 
-/**
- * Generates a greeting message based on the current hour and displays it on the webpage.
- *
- * @return {void} This function does not return anything.
- */
+// render the greeting message
 function generateGreetingMessage() {
-  let greeting = getGreeting();
-  if (active_user.name == "Guest") {
-    new Div("greetings", "greetings-span", "font-t1", greeting);
-    new Div("greetings", "greeting-name", "", "");
-  } else {
-    new Div("greetings", "greetings-span", "font-t1", `${greeting},`);
-    new Div("greetings", "greeting-name", "", active_user.name);
-  }
+  let greeting = getGreeting(); // get the appropriate greeting by time
+  new Div("greetings", "greetings-span", "font-t1", `${greeting}${active_user.name === "Guest" ? "" : ","}`);
+  new Div("greetings", "greeting-name", "", active_user.name === "Guest" ? "" : active_user.name);
 }
 
-/**
- * Generate a greeting based on the current hour.
- *
- * @return {string} The appropriate greeting based on the current hour.
- */
+// get the appropriate greeting by time
 function getGreeting() {
-  const currentHour = new Date().getHours();
-  let greeting;
-  if (currentHour >= 6 && currentHour < 12) {
-    greeting = "Good Morning";
-  } else if (currentHour >= 12 && currentHour < 18) {
-    greeting = "Good Afternoon";
-  } else if (currentHour >= 18 && currentHour < 21) {
-    greeting = "Good Evening";
-  } else {
-    greeting = "Good Night";
-  }
-  return greeting;
+  const hour = new Date().getHours();
+  if (hour >= 6 && hour < 12) return "Good Morning"; //good morning between 6 & 12
+  if (hour >= 12 && hour < 18) return "Good Afternoon"; // good afternoon between 12 & 18
+  if (hour >= 18 && hour < 21) return "Good Evening"; // good evening between 18 & 21
+  return "Good Night"; // good night between 21 & 6
 }
 
-/**
- * Creates summary boxes.
- *
- */
-function createSummaryBoxes() {
-  docID(summaryBox_div_id).innerHTML = "";
 
-  for (let i = 0; i < item_amount; i++) {
+function createSummaryBoxes() {
+  let summaryBox_div_id = "summary-box"; // storage the id of Container of the summary boxes
+  docID(summaryBox_div_id).innerHTML = ""; // clear the container
+  // create the summary boxes and push them in the summary_boxes array
+  for (let i = 0; i < item_amount; i++) { 
     new Div(summaryBox_div_id, `${summaryBox_div_id}-${i}`);
     summary_boxes.push(new SummaryBox(summaryBox_div_id, i));
   }
-  summary_boxes[0].createFirstBox();
+  summary_boxes[0].createFirstBox(summaryBox_div_id);
 }
 
-/**
- * Navigates to the board.html page.
- *
- * @return {undefined} No return value.
- */
+// relocate to the Board
 function navToBoard() {
   window.location = "../html/board.html";
 }
+
+// change the paaramter of the summary boxes by the window size
 window.addEventListener("resize", function () {
   changeScreenView();
 });
 
-/**
- * Change the screen view by checking and rendering the position of each summary box.
- *
- * @param {Array} summary_boxes - An array of summary boxes.
- * @return {undefined} This function does not return a value.
- */
+
 function changeScreenView() {
   for (let index = 0; index < summary_boxes.length; index++) {
-    const element = summary_boxes[index];
-    element.checkScreenView(index);
-    element.renderPosition(index);
+    const element = summary_boxes[index]; // get the current element
+    element.checkScreenView(index); // change the size of the summary boxes by the window size
+    element.renderPosition(index); // change the position of the summary boxes by the window size
   }
 }

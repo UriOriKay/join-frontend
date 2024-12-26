@@ -59,6 +59,7 @@ header {
   margin-left: -7rem;
   margin-top: 2rem;
   min-width: fit-content;
+  z-index: 3;
 }
 
 .dropdown-item {

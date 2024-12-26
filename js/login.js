@@ -1,111 +1,95 @@
-let istogglePassword = false;
-let emails = [];
+let isPasswordShown = false;
 
-/**
- * Initializes the login process by loading users, setting up the back button for signup,
- * and rendering the login elements.
- *
- * @return {Promise<void>} A promise that resolves when the login process is complete.
- */
+// Start the render process by define as login site
 async function initLogin() {
-  // await loadUsers();
+  // await activeCheck(sessionStorage.getItem("token")) || await activeCheck(localStorage.getItem("token")) ? navToSummary() : null;
   renderLoginElements("Login");
 }
 
-/**
- * Renders the login elements based on the given boolean value.
- *
- * @param {boolean} bool - Determines whether to render login elements for "Login" or "Sign up".
- * @return {undefined} This function does not return a value.
- */
+// Render the login elements
 function renderLoginElements(action) {
-  clearContent();
-  setLoginFormSubmitBehaviour(action);
-  createInputs(action);
-  createButtons(action);
-  setLoginHeadline(action);
-  changeStyle(action);
+  clearContent(); // empty the HTML container for render and rerender process
+  setLoginFormSubmitBehaviour(action); // set onsubmit for the Login form
+  createInputs(action); // create the input fields for the forms
+  createButtons(action); // create buttons for Login and Sign up
+  setLoginHeadline(action); // set the headline for the forms
+  changeStyle(action); // individual style for the forms
 }
 
+// empty the HTML container for render and rerender process
 function clearContent() {
   docID("inputs-con").textContent = "";
   docID("login-form-button-group").textContent = "";
   docID("signup-back-btn") ? docID("signup-back-btn").remove() : "";
 }
 
+// set onsubmit for the Login form
 function setLoginFormSubmitBehaviour(action) {
-  if (action === "Sign up") {
-    docID("login-form").onsubmit = function () {
-      return false;
-    };
-  }
+  action === "Sign up" ? docID("login-form").onsubmit = () => {return false} : null;
 }
 
+// create the input fields for the forms
 function createInputs(action) {
   if (action === "Login") {
-    createInput("inputs-con", "imput-img-div", "email", "Email", "../assets/img/icon-mail.png", "input-con-email-input-id");
-    createInput("inputs-con", "imput-img-div", "password", "Password", "../assets/img/icon-lock-closed.png", "input-con-password-input-id");
+    createInput("email", "Email", "../assets/img/icon-mail.png", "input-con-email-input-id");
+    createInput("password", "Password", "../assets/img/icon-lock-closed.png", "input-con-password-input-id");
     new CustomCheckbox("inputs-con", "checkbox-remember-me", "Remember Me");
   } else if (action === "Sign up") {
-    createInput("inputs-con", "imput-img-div", "text", "Name", "../assets/img/icon-person.png", "input-con-name-input-id");
-    createInput("inputs-con", "imput-img-div", "email", "Email", "../assets/img/icon-mail.png", "input-con-email-input-id");
-    createInput("inputs-con", "imput-img-div", "password", "Password", "../assets/img/icon-lock-closed.png", "input-con-password-input-id");
-    createInput("inputs-con", "imput-img-div", "password", "Confirm Password", "../assets/img/icon-lock-closed.png", "input-con-confirm-password-input-id");
-    docID("inputs-con-img").onclick = togglePassword;
+    createInput("text", "Name", "../assets/img/icon-person.png", "input-con-name-input-id");
+    createInput("email", "Email", "../assets/img/icon-mail.png", "input-con-email-input-id");
+    createInput("password", "Password", "../assets/img/icon-lock-closed.png", "input-con-password-input-id");
+    createInput("password", "Confirm Password", "../assets/img/icon-lock-closed.png", "input-con-confirm-password-input-id");
+    docID("inputs-con-img").onclick = togglePassword; 
 
-    createPrivacyCheckbox();
+    createPrivacyCheckbox(); // // create checkbox for privacy accept in Sign up
   }
 }
 
-function createInput(containerId, divClass, inputType, labalText, imgSrc, inputId) {
-  new Divinputimg(containerId, divClass, inputType, labalText, imgSrc, inputId, `${inputId}-div-id`);
+// create input fields with image with help of Divinputimg class
+function createInput(inputType, labalText, imgSrc, inputId) {
+  new Divinputimg("inputs-con", "imput-img-div", inputType, labalText, imgSrc, inputId, `${inputId}-div-id`);
   docID(inputId).required = true;
 }
 
+// create checkbox for privacy accept in Sign up
 function createPrivacyCheckbox() {
   let custom_checkbox_accept_privacy = new CustomCheckbox("inputs-con", "checkbox-accept-privacy", "");
   docID("checkbox-accept-privacy").required = true;
   custom_checkbox_accept_privacy.text =
     new Span("labelcheckbox-accept-privacy", "", "", "I accept the") +
     new Anchor("labelcheckbox-accept-privacy", "", "", "../html/PrivacyPolicy.html", " Privacy Policy");
-  docID("labelcheckbox-accept-privacy").onclick = checkAcception;
+  docID("labelcheckbox-accept-privacy").onclick = checkAcception;  // make form sendable
 }
 
+// create buttons for Login and Sign up
 function createButtons(action) {
   if (action === "Login") {
-    createButton("login-form-button-group", "login-button", "button font-t5",() => loginUser("Login"), "Log in");
-    createButton("login-form-button-group", "guest-login-button", "secondary-button font-t5",() => loginUser("Guest"), "Guest Log in");
+    createButton("login-button", "button font-t5",() => loginUser("Login"), "Log in");
+    createButton("guest-login-button", "secondary-button font-t5",() => loginUser("Guest"), "Guest Log in");
 } else if (action === "Sign up") {
-    createButton("login-form-button-group", "signup-form-btn", "button font-t5", saveInputValues, "Sign up");
+    createButton("signup-form-btn", "button font-t5", saveInputValues, "Sign up");
     if (!docID("signup-back-btn")) {
       new BackBtn("login-item", "signup", function () {renderLoginElements("Login")});
     }
   }
 }
 
-function createButton(containerId, buttonId, buttonClass, onClickHandler, buttonText) {
-  new Button(containerId, buttonId, buttonClass, onClickHandler, buttonText);
+// create buttons with help of Button class
+function createButton(buttonId, buttonClass, onClickHandler, buttonText) {
+  new Button("login-form-button-group", buttonId, buttonClass, onClickHandler, buttonText);
 }
 
+// set the headline for the forms
 function setLoginHeadline(action) {
   docID("login-headline").textContent = action;
 }
 
-
-/**
- * Change the style of the page based on the given boolean value.
- *
- * @param {boolean} bool - The boolean value that determines the style change.
- * @return {void} This function does not return a value.
- */
-function changeStyle(bool) {
-  if (bool === "Sign up") {
-    changeStyleSignup()
-  } else {
-    changeStyleLogin();
-  }
+// individual style for the forms
+function changeStyle(action) {
+  action === "Sign up" ? changeStyleSignup() :  changeStyleLogin();
 }
 
+// individual style for the Sign up form
 function changeStyleSignup() {
   docID("button-group").style.display = "none";
   docID("logo-login").src = "../assets/img/Logo-middle_white.png";
@@ -114,44 +98,42 @@ function changeStyleSignup() {
   docID("login-form-button-group").style.justifyContent = "center";
   docID("signup-back-btn").style.display = "flex";
   docID("login-link-group").innerHTML = "";
-  addLinks("link-group-a");
+  addLinks("a"); // create the links for privacy policy and legal notice
 }
 
+// individual style for the Login form
 function changeStyleLogin() {
   docID("button-group").style.display = "flex";
   docID("login-main").style.backgroundColor = "var(--white)";
   docID("logo-login").src = "../assets/img/Logo-middle_blue.png";
   docID("login-link-group").innerHTML = "";
-  addLinks();
+  addLinks("b");// create the links for privacy policy and legal notice
 }
 
-function addLinks(className) {
-  new Anchor("login-link-group", "", "className", "../html/PrivacyPolicy.html", "Private Policy");
-  new Anchor("login-link-group", "", "className", "../html/LegalNotice.html", "Legal Notice");
+// create the links for privacy policy and legal notice
+function addLinks(a) {
+  new Anchor("login-link-group", "", `link-group-${a}`, "../html/PrivacyPolicy.html", "Private Policy");
+  new Anchor("login-link-group", "", `link-group-${a}`, "../html/LegalNotice.html", "Legal Notice");
 }
 
-/**
- * Navigates to the summary page by changing the window location.
- *
- * @param {type} No parameters are required for this function.
- * @return {type} No return value.
- */
+// send the user to the summary page
 function navToSummary() {
   window.location = "../html/summary.html";
 }
 
-/**
- * Save the input values from the signup form.
- *
- * @return {Promise<void>} The Promise that resolves when the input values are saved.
- */
+// store the input values and start the register process
 async function saveInputValues() {
   let input_name_value = docID("input-con-name-input-id").value;
   let input_email_value = docID("input-con-email-input-id").value;
   let input_password_value = docID("input-con-password-input-id").value;
   let input_confirm_password_value = docID("input-con-confirm-password-input-id").value;
   let isCheckedBox = docID("checkbox-accept-privacy").checked
+  InputValuesToUser(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox)
+  
+}
 
+// start the register process, by checking the input values and register by Api call
+async function InputValuesToUser(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox) {
   if (isCheckSignupForm(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox) 
     && isSamePassword(input_password_value, input_confirm_password_value)
   ) {
@@ -168,11 +150,7 @@ async function saveInputValues() {
   }
 }
 
-/**
- * Checks if the signup form is complete.
- *
- * @return {boolean} True if the signup form is complete, false otherwise.
- */
+// check if the necessary input values are valid
 function isCheckSignupForm(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox) {
   return (
     input_name_value != "" &&
@@ -183,25 +161,12 @@ function isCheckSignupForm(input_name_value, input_email_value, input_password_v
   );
 }
 
-/**
- * Checks if the password and confirm password values are the same.
- *
- * @return {boolean} true if the password and confirm password values are the same, false otherwise.
- */
+// check is the password and confirm password are the same
 function isSamePassword(input_password_value, input_confirm_password_value) {
   return input_password_value == input_confirm_password_value;
 }
 
-/**
- * Adds a new user to the system.
- *
- * @param {Object} newUser - The user object containing the following properties:
- *   - name (string): The name of the user.
- *   - mail (string): The email of the user.
- *   - nameTag (string): The generated name tag for the user.
- *   - password (string): The password of the user.
- * @return {Promise} - A promise that resolves once the new user has been added.
- */
+// create the Json for the API call to register a new user and start Api Call
 async function addNewUser(input_name_value, input_email_value, input_password_value, input_confirm_password_value) {
   let newUser = {
     "name": input_name_value,
@@ -209,24 +174,11 @@ async function addNewUser(input_name_value, input_email_value, input_password_va
     "password": input_password_value,
     "repeated_password": input_confirm_password_value
   };
-    response = await postItem("user/register", newUser);
+    response = await postItem("user/register", newUser); // start Api Call
     return response;
 }
 
-/**
- * Checks if the given email is contained in the array of emails.
- *
- * @return {boolean} - Returns true if the email is contained in the array, false otherwise.
- */
-function isContainedMails(input_email_value) {
-  let emails = [];
-  users.forEach((user) => {
-    emails.push(user.mail);
-  });
-  return emails.includes(input_email_value) ? (bool = true) : (bool = false);
-}
-
-
+// init the login process, by store the input values and start the login process by checking is Guest Login
 function loginUser(action) {
   active_user = "";
   let input_email_value = docID("input-con-email-input-id").value;
@@ -235,65 +187,37 @@ function loginUser(action) {
   action === "Login" ? handleLogin(input_email_value, input_password_value) : handleGuest();
 }
 
+// API Clall for login
 async function handleLogin(input_email_value, input_password_value) {
-  response = await postItem("user/login", {"username": input_email_value, "password": input_password_value});
+  console.log('handle login :>> ');
+  response = await loginItem("user/login", {"email": input_email_value, "password": input_password_value});
+  console.log('response :>> ', response);
   if (response.status === 200) {
     let response_user = await response.json();
     storage = docID("checkbox-remember-me").checked ? "localStorage" : "sessionStorage";
     allDataSave(response_user, storage);
     navToSummary();
-  }
-}
-
-
-
-function handleGuest() {
-  active_user = users[0];
-  saveUser(active_user, false);
-  navToSummary();
-}
-
-
-function saveUser(user, remember) {
-  active_user = JSON.stringify(user);
-  remember ? localUsersave(active_user) : sessionUsersave(active_user);
-}
-
-function showError(elementId, message, resetBoth = false) {
-  docId(elementId).value = "";
-  resetBoth ? (docId("input-con-password-input-id").value = "") : alert(message);
-}
-
-
-/**
- * Checks if the privacy checkbox is checked and enables or disables the signup form button accordingly.
- *
- * @param {type} docID - a function that takes an ID as a parameter and returns the corresponding element
- * @return {type} undefined - there is no return value for this function
- */
-function checkAcception() {
-  if (docID("checkbox-accept-privacy").checked) {
-    docID("signup-form-btn").disabled = false;
   } else {
-    docID("signup-form-btn").disabled = true;
+    let response_user = await response.json();
+    message = response_user.error;
+    new Confirmation("login-main", message, false);
   }
 }
 
-/**
- * Toggles the visibility of a password input field and updates the corresponding image.
- *
- * @param {string} id - The ID of the password input field.
- * @return {undefined} This function does not return a value.
- */
+// set the Parameter for Guest Login
+function handleGuest() {
+  handleLogin("guest@guest.de", "guest");
+}
+
+//make form sendable
+function checkAcception() {
+  docID("signup-form-btn").disabled = !docID("checkbox-accept-privacy").checked;
+}
+
+//toogle password visiblity
 function togglePassword(id) {
   let img_id = id + "-img";
-  if (istogglePassword) {
-    docID(id).type = "text";
-    docID(img_id).src = "../assets/img/showpassword.png";
-    istogglePassword = false;
-  } else {
-    docID(id).type = "password";
-    docID(img_id).src = "../assets/img/icon-lock-closed.png";
-    istogglePassword = true;
-  }
+  docID(id).type = isPasswordShown ? "text" : "password";
+  docID(img_id).src = isPasswordShown ? "../assets/img/showpassword.png" : "../assets/img/icon-lock-closed.png";
+  isPasswordShown = !isPasswordShown;
 }

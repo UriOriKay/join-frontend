@@ -4,33 +4,21 @@ let filteredTasks = [];
 let filteredTasks_Ids = [];
 let onTouchScrollInterval;
 
-/**
- * Initializes the board by performing the following actions:
- * - Calls the `init` function
- * - Sets the active user
- * - Updates user values
- * - Loads backend
- * - Creates the head container
- * - Creates the search input field with image
- * - Adds event listener to activate the keyboard
- * - Creates the "Add Task" button
- * - Creates the close button image
- * - Creates the content container
- * - Creates the board segments
- * - Creates the board cards
- * - Creates the main board card container
- * - Sets the navigation bar active
- *
- * @return {void} This function does not return any value
- */
+// initial the board
 async function initBoard() {
-  token = localStorage.getItem("token");
-  activeUser(token);
-  init();
-  updateUserValues();
-  await loadTasks(token);
-  await loadContacts(token);
-  await loadCategorys(token);
+  token = await activeUser(); //check if user is logged in and storage token
+  init(); // render header and navbar
+  await loadTasks(token); // load all Tasks
+  await loadContacts(token); // load all contacts
+  await loadCategorys(token); // load all categorys
+  BoardrenderHTML() // render html elements
+  createBoardCards();
+  new Div("main-card-div", "main-board-card");
+  setNavBarActive("board-link");
+}
+
+// render board html elements
+function BoardrenderHTML() {
   new Div("main-board", "board-head-con"); 
   new Div("board-head-con", "search-con");
   new Divinputimg("search-con","search","text","Find Task","../assets/img/searchLupe.png","search-text-input-id","search-con-div");
@@ -42,33 +30,17 @@ async function initBoard() {
   new BoardSegment("board-content-con", "in-progress", "In progress");
   new BoardSegment("board-content-con", "await-feedback", "Await feedback");
   new BoardSegment("board-content-con", "done", "Done");
-  createBoardCards();
-  new Div("main-card-div", "main-board-card");
-  setNavBarActive("board-link");
 }
 
-/**
- * Checks if the current device is a mobile device and performs specific tasks if it is.
- *
- * @return {void} This function does not return a value.
- */
+// get all elements for move mobile Cards
 function checkMobile() {
-  // if (window.matchMedia("(max-width: 1025px)").matches) {
     touchTasks = document.querySelectorAll(".board-card");
     touchTasks.forEach(addStart);
-  // }
 }
 
-/**
- * Adds a touchstart, touchend, touchmove event listener to the given element.
- *
- * @param {Element} elem - The element to add the event listener to.
- */
-function addStart(elem) {
-  elem.addEventListener("touchstart", (e) => {
-
-    let startX = e.changedTouches[0].clientX;
-    let startY = e.changedTouches[0].clientY;
+// the function for move the cards by clone
+async function addStart(elem) {
+  await elem.addEventListener("touchstart", (e) => {
     let nextX;
     let nextY;
     let drop_name;
@@ -97,6 +69,7 @@ function addStart(elem) {
           segment_pos.top < nextY && nextY < segment_pos.bottom
         ) {
           drop_name = segment.id;
+          console.log('segment.id :>> ', segment.id);
           drop_name = drop_name.replace("-con", "");
           moveTo(drop_name);
         }
@@ -117,14 +90,7 @@ function addStart(elem) {
   });
 }
 
-/**
- * Fuction is called by the moveTouching() function to allow for a dymanic scroll during the drag-drop on mobile devices
- * It calculates the top and bottom 30 pixels. When a touch is registered in the defined areas an interval is called that scrolls up or down.
- * Scroll speed is dynamically determined by how high/low the user touches.
- * clears interval every time an area is touched to avoid stacking intervals
- *
- * @param {event} event the event of someone touching the screen
- */
+// check is Scroll necessary
 function checkAutoScroll(event) {
   let segmentsDiv = document.querySelector("#board-content-con");
   let rect = segmentsDiv.getBoundingClientRect();
@@ -146,12 +112,7 @@ function checkAutoScroll(event) {
   }
 }
 
-/**
- * Opens the add task functionality in the specified container.
- *
- * @param {string} container - The ID of the container element where the add task functionality will be opened.
- * @return {undefined} This function does not return a value.
- */
+// open the menu for ass Task
 function openAddTask(container) {
   docID("add-card-con").classList.remove("d-none");
   new Img("add-card-div", "add-card-close", "card-close", "../assets/img/close.png");
@@ -161,23 +122,13 @@ function openAddTask(container) {
   new Button("button-con", "add-task-btn", "button",  () => {boardAddTask(container);}, "Create Task");
 }
 
-/**
- * Adds a task to the board container.
- *
- * @param {type} container - The container to add the task to.
- * @return {type} The close function of the added task.
- */
+// add the new task and close the menu
 function boardAddTask(container) {
   let close = addTask(container);
   close ? closeCard("add-card-con", "add-card-div") : "";
 }
 
-/**
- * Adds an event listener to the search text input element and calls the filterTasks function when the 'Enter' key is pressed.
- *
- * @param {Event} e - The keydown event object.
- * @return {void} This function does not return a value.
- */
+// filter function for the board
 function keyboardActive() {
   docID("search-text-input-id").addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
@@ -186,11 +137,7 @@ function keyboardActive() {
   });
 }
 
-/**
- * Renders the board segments.
- *
- * @return {undefined} No return value.
- */
+// rerender the Board Elements
 function renderBoardSegments() {
   resetSegments();
   Board_task = [];
@@ -198,83 +145,52 @@ function renderBoardSegments() {
   renderNoTasks();
 }
 
-/**
- * Resets the segments of the HTML document.
- *
- * @param {void} None - This function takes no parameters.
- * @return {void} This function does not return a value.
- */
+// empty the Container for the Segments
 function resetSegments() {
-  docID("to-do-div").innerHTML = "";
-  docID("in-progress-div").innerHTML = "";
-  docID("await-feedback-div").innerHTML = "";
-  docID("done-div").innerHTML = "";
+  ["to-do-div", "in-progress-div", "await-feedback-div", "done-div"].forEach((e) => {
+    docID(e).innerHTML = "";
+  })
 }
 
-/**
- * Creates board cards based on the tasks array.
- *
- * @param {Array} tasks - The array of tasks.
- * @return {undefined} This function does not return a value.
- */
+// render the Board Cards
 function createBoardCards() {
   tasks.forEach((e) => {
     Board_task.push(new BoardCard(e));
   });
 }
 
-/**
- * Renders the appropriate HTML elements when there are no tasks.
- *
- * @return {undefined} This function does not return a value.
- */
+// loop to all segments and check if there are no tasks
 function renderNoTasks() {
   task_amounts = getTasksAmounts();
   for (let i = 0; i < task_amounts.length; i++) {
-    task_amounts[i] == 0
-      ? new Div(
-          segements_array[i].con.replace("-con", "-div"),
-          "noTask-div-id",
-          "noTask-div",
-          `No Task ${segements_array[i].headline}`
-        )
-      : "";
+    task_amounts[i] == 0 ? noTaskDiv(i): "";
   }
 }
 
-/**
- * Opens a big card with the given ID.
- *
- * @param {number} id - The ID of the card.
- * @return {undefined} This function does not return a value.
- */
+// render the Div if there are no tasks
+function noTaskDiv(i) {
+  new Div(
+    segements_array[i].con.replace("-con", "-div"),
+    "noTask-div-id",
+    "noTask-div",
+    `No Task ${segements_array[i].headline}`
+  )
+}
+
+// Open the bis Board Task Card
 function openBigCard(id) {
   docID("main-card-div").classList.remove("d-none");
   tasks.forEach((e) => {
-    if (e.id == id) {
-      new BoardBigCard(e, "main-board-card");
-    }
+    e.id == id ? new BoardBigCard(e, "main-board-card") : "";
   });
 }
 
-/**
- * Closes a card and performs additional actions if an event object is provided.
- *
- * @param {string} parent - The ID of the parent element.
- * @param {string} child - The ID of the child element.
- * @param {object} e - An optional event object.
- */
+// close the Big Board Card
 function closeCard(parent, child, e) {
   if (e) {
-    amount = e.subtasks.length;
-    e.subtaskschecked = [];
-    for (let i = 0; i < amount; i++) {
-      if (docID(`main-bord-card-subtasks${i}-checkbox`).checked) {
-        e.subtaskschecked.push("checked");
-      } else {
-        e.subtaskschecked.push("unchecked");
-      }
-    }
+    e.subtaskschecked = e.subtasks.map((_,i) => 
+      docID(`main-bord-card-subtasks${i}-checkbox`).checked ? "checked" : "unchecked"
+    );
   }
   docID(child).innerHTML = "";
   docID(parent).classList.add("d-none");
@@ -282,88 +198,40 @@ function closeCard(parent, child, e) {
   subtasks = [];
 }
 
-/**
- * Sets the current dragged element to the given event.
- *
- * @param {Event} e - The event object representing the drag start event.
- */
+// storage the Dragged Element
 function startDragging(e) {
   current_Dragged_Element = e;
 }
 
-/**
- * A description of the entire function.
- *
- * @param {type} ev - The event object.
- * @return {undefined} This function does not return a value.
- */
+// allow the drop
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
-/**
- * Moves the task to the specified category.
- *
- * @param {string} category - The category to move the task to.
- * @return {undefined} This function does not return a value.
- */
-function moveTo(category) {
-  let id = getTasksIdx();
-  tasks[id].container = `${category}-con`;
-  setItem("tasks", tasks);
+// Update the task after move to a Board category
+async function moveTo(category) {
+  move_Task = tasks.filter((e) => e.id == current_Dragged_Element)[0];
+  move_Task.container = category + "-con";
+  console.log('move_Task :>> ', move_Task);
+  await updateItem("task", move_Task, localStorage.getItem("token"));
+  await loadContacts(localStorage.getItem("token"));
   renderBoardSegments();
 }
 
-/**
- * Drag over function.
- *
- * @param {string} category - The category being dragged over.
- * @return {undefined} There is no return value.
- */
+//allow the drop when drag over
 function dragOver(category) {
   allowDrop(event);
 }
 
-/**
- * Retrieves the index of a task from the tasks array based on the value of the current_Dragged_Element.
- *
- * @return {number} The index of the task in the tasks array.
- */
-function getTasksIdx() {
-  let task_idx;
-
-  for (let i = 0; i < tasks.length; i++) {
-    const element_idx = tasks[i].id;
-    if (current_Dragged_Element == element_idx) {
-      task_idx = i;
-    }
-  }
-  return task_idx;
-}
-
-/**
- * Filters tasks based on a search word.
- *
- * @param {string} word - The search word to filter tasks.
- * @return {void} This function does not return a value.
- */
+// filter the tasks by type in the search bar
 function filterTasks() {
   word = docID("search-text-input-id").value;
   if (word != "") {
     filteredTasks = [];
     filteredTasks_Ids = [];
     filteredTasks = document.querySelectorAll(".board-card");
-
-    filteredTasks.forEach((e) => {
-      e.classList.add("d-none");
-    });
-
-    tasks.forEach((e) => {
-      if (isMatch(e, word)) {
-        let id = e.container.replace("-con", "") + `-card-${e.id}`;
-        filteredTasks_Ids.push(id);
-      }
-    });
+    filteredTasks.forEach((e) => {e.classList.add("d-none");});
+    fillFilteredTasksIds(e, word)
 
     filteredTasks_Ids.forEach((e) => {
       docID(e).classList.remove("d-none");
@@ -373,13 +241,17 @@ function filterTasks() {
   }
 }
 
-/**
- * Checks if the given object has a match for the specified word in its title, description, or nameArray.
- *
- * @param {Object} obj - The object to check for a match.
- * @param {string} word - The word to search for.
- * @return {boolean} - True if a match is found, false otherwise.
- */
+// get the Ids of the filtered tasks
+function fillFilteredTasksIds(e, word) {
+  tasks.forEach((e) => {
+    if (isMatch(e, word)) {
+      let id = e.container.replace("-con", "") + `-card-${e.id}`;
+      filteredTasks_Ids.push(id);
+    }
+  });
+}
+
+// check if the task match the search word in title, description and subtasks
 function isMatch(obj, word) {
   let title = obj.title.toLowerCase().includes(word.toLowerCase());
   let description = obj.description.toLowerCase().includes(word.toLowerCase());
@@ -387,13 +259,7 @@ function isMatch(obj, word) {
   return title || description || yourNameArray;
 }
 
-/**
- * Checks if the given word is included in the array of subtasks in the given object.
- *
- * @param {Object} obj - The object containing the array of subtasks.
- * @param {string} word - The word to search for in the array of subtasks.
- * @return {boolean} Returns true if the word is found in the array of subtasks, otherwise returns false.
- */
+// check if subtask match the search word
 function nameArray(obj, word) {
   output = false;
   obj.subtasks.forEach((e) => {
@@ -404,25 +270,16 @@ function nameArray(obj, word) {
   return output;
 }
 
-/**
- * Deletes a card from the tasks array based on the provided index.
- *
- * @param {number} idx - The index of the card to be deleted.
- * @return {Promise<void>} - A promise that resolves once the card has been deleted.
- */
+// delete the task and close the card
 async function deleteCard(id) {
-  await deleteItem("task", {"id": id}, localStorage.getItem("token"));
+  token = await activeUser()
+  await deleteItem("task", {"id": id}, token);
   closeCard("main-card-div", "main-board-card");
-  await loadTasks(localStorage.getItem("token"));
+  await loadTasks(token);
   renderBoardSegments();
 }
 
-/**
- * Edits a card.
- *
- * @param {Event} e - the event triggering the function
- * @return {undefined} nothing is returned
- */
+// render the Edit Card
 function editCard(e) {
   docID("main-board-card").innerHTML = "";
   new Img("main-board-card", "card-close", "card-close", "../assets/img/close.png");
@@ -445,48 +302,32 @@ function editCard(e) {
   new Button("button-con","add-task-btn", "button", () => {updateTasks(e);}, "Ok");
 }
 
-/**
- * Edits the urgency of a given element.
- *
- * @param {Event} e - The event object containing the element and its priority.
- * @return {void} This function does not return a value.
- */
+// render the Urgency by the button
 function editUrgency(e) {
   e.priority == "Urgent" ? activeUrgency("btn-red") : "";
   e.priority == "Medium" ? activeUrgency("btn-orange") : "";
   e.priority == "Low" ? activeUrgency("btn-green") : "";
 }
 
-/**
- * Checks the corresponding checkboxes for each associate.
- *
- * @param {object} e - The event object.
- */
+// select the contacts in the menu
 function checkTheBox(e) {
   e.associates.forEach((ele) => {
     docID(`check-${ele}`).checked = true;
+    docID(`contact-list-parent-div-${ele}`).classList.add("active-list");
   });
 }
 
-/**
- * Checks the category of an event and updates the corresponding category checkboxes.
- *
- * @param {Object} e - The event object.
- */
+// select the category in the menu
 function checkTheCategory(e) {
   categorys.forEach((element) => {
     if (e.category.includes(element.id)) {
       docID(`category-check-${element.name}`).checked = true;
+      docID(`tasks-category-${element.name}`).classList.add("active-list");
     }
   });
 }
 
-/**
- * Adds or edits subtasks based on the given event.
- *
- * @param {object} e - The event object containing subtasks.
- * @return {undefined} No return value.
- */
+// render the subtasks
 function addEditSubtasks(e) {
   subtask = [];
   e.subtasks.forEach((ele) => {
@@ -495,14 +336,8 @@ function addEditSubtasks(e) {
   subtaskListRender();
 }
 
-/**
- * Updates the tasks with the provided information.
- *
- * @param {Event} e - The event object.
- * @return {void}
- */
+// update the task by the values
 async function updateTasks(e) {
-  console.log('ele :>> ', e);
   let urgency = theUrgency();
   theSelectors(".tasks-contacts");
   theSelectors(".tasks-category");
@@ -514,24 +349,24 @@ async function updateTasks(e) {
   e.priorityImg = urgency[1];
   e.subtasks = SubtaskUpdate(subtask, e);
   e.user = associates_ids
-  delete e.associates
-  delete e.assignedTo
-  delete e.assignedToNameTag;
-  delete e.assignedToColor;
-  delete e.subtaskschecked,
-  // console.log('e :>> ', e);
-  await updateItem("task", e, localStorage.getItem("token"));
-  await loadTasks(localStorage.getItem("token"));
+  deleteTasksParameters(e)
+  token = await activeUser()
+  await updateItem("task", e, token);
+  await loadTasks(token);
   subtask = [];
   closeCard("main-card-div", "main-board-card");
 }
 
-/**
- * Edits the checked status of subtasks.
- *
- * @param {object} e - The event object containing the subtaskschecked array.
- * @return {array} The updated array of checked subtasks.
- */
+//delete unnecessary parameters
+function deleteTasksParameters(e) {
+  delete e.associates;
+  delete e.assignedTo;
+  delete e.assignedToNameTag;
+  delete e.assignedToColor;
+  delete e.subtaskschecked;
+}
+
+// select the checked subtasks
 function editSubtaskchecked(e) {
   checked = e.subtaskschecked;
   if (subtask.length > checked.length) {
@@ -542,6 +377,7 @@ function editSubtaskchecked(e) {
   return checked;
 }
 
+// update the subtasks
 function SubtaskUpdate(subtask, e) {
   let news = []; 
   console.log('e.subtaskschecked :>> ', e.subtaskschecked);

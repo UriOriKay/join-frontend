@@ -45,8 +45,8 @@ class Contact {
    * @return {type} description of return value
    */
   fillEditContact() {
-    docID(input_name.input_id).value = this.contact_name;
-    docID(input_email.input_id).value = this.contact_email;
-    docID(input_phone.input_id).value = this.contact_phone;
+    docID(`input-con-name-input-id`).value = this.contact_name;
+    docID(`input-con-email-input-id`).value = this.contact_email;
+    docID(`input-con-phone-input-id`).value = this.contact_phone;
   }
 }

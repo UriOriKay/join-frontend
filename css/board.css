@@ -198,6 +198,7 @@ position: absolute;
 .edit-img-con {
     display:flex;
     color: #2A3647;
+    cursor: pointer;
 }
 
 #edit-img-2 {
