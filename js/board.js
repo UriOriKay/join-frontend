@@ -4,7 +4,19 @@ let filteredTasks = [];
 let filteredTasks_Ids = [];
 let onTouchScrollInterval;
 
-// initial the board
+/**
+ * Initializes the task board by loading data and rendering elements.
+ *
+ * Workflow:
+ * 1. Verifies the user is logged in and retrieves the token.
+ * 2. Renders the header and navbar.
+ * 3. Loads tasks, contacts, and categories.
+ * 4. Renders the board layout and creates task cards.
+ * 5. Activates the board link in the navbar.
+ *
+ * @async
+ * @function initBoard
+ */
 async function initBoard() {
   token = await activeUser(); //check if user is logged in and storage token
   init(); // render header and navbar
@@ -17,7 +29,16 @@ async function initBoard() {
   setNavBarActive("board-link");
 }
 
-// render board html elements
+/**
+ * Renders the static HTML elements for the task board.
+ *
+ * Workflow:
+ * 1. Creates containers for the search bar, board segments, and add task button.
+ * 2. Adds pre-defined segments for task categories (To Do, In Progress, etc.).
+ *
+ * @function BoardrenderHTML
+ */
+
 function BoardrenderHTML() {
   new Div("main-board", "board-head-con"); 
   new Div("board-head-con", "search-con");
@@ -32,13 +53,33 @@ function BoardrenderHTML() {
   new BoardSegment("board-content-con", "done", "Done");
 }
 
-// get all elements for move mobile Cards
+/**
+ * Prepares all board cards for mobile drag-and-drop interaction.
+ *
+ * Workflow:
+ * 1. Selects all task cards on the board.
+ * 2. Adds event listeners for touch interactions to each card.
+ *
+ * @function checkMobile
+ */
 function checkMobile() {
     touchTasks = document.querySelectorAll(".board-card");
     touchTasks.forEach(addStart);
 }
 
-// the function for move the cards by clone
+/**
+ * Adds touch interaction listeners to a task card for dragging.
+ *
+ * Workflow:
+ * 1. Clones the task card and appends it to the document body.
+ * 2. Tracks touch movements to move the cloned card.
+ * 3. Detects the drop area and updates the card's category on touch end.
+ *
+ * @async
+ * @function addStart
+ * @param {HTMLElement} elem - The task card element.
+ */
+
 async function addStart(elem) {
   await elem.addEventListener("touchstart", (e) => {
     let nextX;
@@ -90,7 +131,13 @@ async function addStart(elem) {
   });
 }
 
-// check is Scroll necessary
+/**
+ * Automatically scrolls the board segments during touch interactions near edges.
+ *
+ * @function checkAutoScroll
+ * @param {TouchEvent} event - The touch event triggering the scroll check.
+ */
+
 function checkAutoScroll(event) {
   let segmentsDiv = document.querySelector("#board-content-con");
   let rect = segmentsDiv.getBoundingClientRect();
@@ -112,7 +159,17 @@ function checkAutoScroll(event) {
   }
 }
 
-// open the menu for ass Task
+/**
+ * Opens the add task menu.
+ *
+ * Workflow:
+ * 1. Displays the add task modal.
+ * 2. Sets up the add task form and a button to save the new task.
+ *
+ * @function openAddTask
+ * @param {string} container - The container ID where the task will be added.
+ */
+
 function openAddTask(container) {
   docID("add-card-con").classList.remove("d-none");
   new Img("add-card-div", "add-card-close", "card-close", "../assets/img/close.png");
@@ -122,22 +179,49 @@ function openAddTask(container) {
   new Button("button-con", "add-task-btn", "button",  () => {boardAddTask(container);}, "Create Task");
 }
 
-// add the new task and close the menu
+
+/**
+ * Adds a new task and closes the add task menu.
+ *
+ * @function boardAddTask
+ * @param {string} container - The container ID where the task will be added.
+ */
+
 function boardAddTask(container) {
   let close = addTask(container);
   close ? closeCard("add-card-con", "add-card-div") : "";
 }
 
-// filter function for the board
+/**
+ * Activates the keyboard listener for the search input field.
+ *
+ * Workflow:
+ * 1. Attaches a `keydown` event listener to the search input field.
+ * 2. Calls `filterTasks` on every key press to dynamically filter tasks on the board.
+ *
+ * @function keyboardActive
+ */
+
 function keyboardActive() {
   docID("search-text-input-id").addEventListener("keydown", (e) => {
-    if (e.key == "Enter") {
+    // if (e.key == "Enter") {
+    //   filterTasks();
+    // }
       filterTasks();
-    }
   });
 }
 
-// rerender the Board Elements
+/**
+ * Rerenders all board segments and their task cards.
+ *
+ * Workflow:
+ * 1. Resets segment containers.
+ * 2. Creates task cards for each segment.
+ * 3. Displays a "No Task" message if a segment is empty.
+ *
+ * @function renderBoardSegments
+ */
+
 function renderBoardSegments() {
   resetSegments();
   Board_task = [];
@@ -145,21 +229,35 @@ function renderBoardSegments() {
   renderNoTasks();
 }
 
-// empty the Container for the Segments
+/**
+ * Clears all task containers in the board segments.
+ *
+ * @function resetSegments
+ */
+
 function resetSegments() {
   ["to-do-div", "in-progress-div", "await-feedback-div", "done-div"].forEach((e) => {
     docID(e).innerHTML = "";
   })
 }
 
-// render the Board Cards
+/**
+ * Creates task cards for each task on the board.
+ *
+ * @function createBoardCards
+ */
 function createBoardCards() {
   tasks.forEach((e) => {
     Board_task.push(new BoardCard(e));
   });
 }
 
-// loop to all segments and check if there are no tasks
+
+/**
+ * Adds "No Task" messages to segments with no tasks.
+ *
+ * @function renderNoTasks
+ */
 function renderNoTasks() {
   task_amounts = getTasksAmounts();
   for (let i = 0; i < task_amounts.length; i++) {
@@ -167,7 +265,12 @@ function renderNoTasks() {
   }
 }
 
-// render the Div if there are no tasks
+/**
+ * Renders a "No Task" message in the specified segment.
+ *
+ * @function noTaskDiv
+ * @param {number} i - The index of the segment to update.
+ */
 function noTaskDiv(i) {
   new Div(
     segements_array[i].con.replace("-con", "-div"),
@@ -177,7 +280,12 @@ function noTaskDiv(i) {
   )
 }
 
-// Open the bis Board Task Card
+/**
+ * Opens a detailed view of a task card.
+ *
+ * @function openBigCard
+ * @param {number} id - The ID of the task to display.
+ */
 function openBigCard(id) {
   docID("main-card-div").classList.remove("d-none");
   tasks.forEach((e) => {
@@ -185,7 +293,14 @@ function openBigCard(id) {
   });
 }
 
-// close the Big Board Card
+/**
+ * Closes the detailed view of a task card and rerenders the board.
+ *
+ * @function closeCard
+ * @param {string} parent - The ID of the parent container.
+ * @param {string} child - The ID of the child container.
+ * @param {Object} [e] - The task object to update (if applicable).
+ */
 function closeCard(parent, child, e) {
   if (e) {
     e.subtaskschecked = e.subtasks.map((_,i) => 
@@ -198,32 +313,70 @@ function closeCard(parent, child, e) {
   subtasks = [];
 }
 
-// storage the Dragged Element
+/**
+ * Sets the current element being dragged.
+ *
+ * @function startDragging
+ * @param {any} e - The element or data associated with the drag operation.
+ */
 function startDragging(e) {
   current_Dragged_Element = e;
 }
 
-// allow the drop
+/**
+ * Allows an element to be dropped by preventing the default behavior.
+ *
+ * @function allowDrop
+ * @param {Event} ev - The drag event triggering the action.
+ */
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
-// Update the task after move to a Board category
+/**
+ * Updates a task's category after it is moved to a different segment.
+ *
+ * Workflow:
+ * 1. Updates the task's container property.
+ * 2. Sends the updated task to the server.
+ * 3. Reloads contacts and rerenders the board.
+ *
+ * @async
+ * @function moveTo
+ * @param {string} category - The new category for the task.
+ */
 async function moveTo(category) {
   move_Task = tasks.filter((e) => e.id == current_Dragged_Element)[0];
   move_Task.container = category + "-con";
-  console.log('move_Task :>> ', move_Task);
-  await updateItem("task", move_Task, localStorage.getItem("token"));
-  await loadContacts(localStorage.getItem("token"));
+  token = await activeUser();
+  await updateItem("task", move_Task, token);
+  await loadContacts(token);
   renderBoardSegments();
 }
 
-//allow the drop when drag over
+/**
+ * Allows the drag-over event for a specific category segment.
+ *
+ * Workflow:
+ * 1. Calls `allowDrop` to prevent the default behavior and allow the drag-over action.
+ *
+ * @function dragOver
+ * @param {string} category - The category segment where the drag-over is occurring.
+ */
 function dragOver(category) {
   allowDrop(event);
 }
 
-// filter the tasks by type in the search bar
+/**
+ * Filters tasks on the board based on the search bar input.
+ *
+ * Workflow:
+ * 1. Hides all tasks.
+ * 2. Displays tasks that match the search query.
+ * 3. If the search bar is empty, rerenders the board.
+ *
+ * @function filterTasks
+ */
 function filterTasks() {
   word = docID("search-text-input-id").value;
   if (word != "") {
@@ -231,7 +384,7 @@ function filterTasks() {
     filteredTasks_Ids = [];
     filteredTasks = document.querySelectorAll(".board-card");
     filteredTasks.forEach((e) => {e.classList.add("d-none");});
-    fillFilteredTasksIds(e, word)
+    fillFilteredTasksIds(word)
 
     filteredTasks_Ids.forEach((e) => {
       docID(e).classList.remove("d-none");
@@ -241,8 +394,13 @@ function filterTasks() {
   }
 }
 
-// get the Ids of the filtered tasks
-function fillFilteredTasksIds(e, word) {
+/**
+ * Collects IDs of tasks that match the search query.
+ *
+ * @function fillFilteredTasksIds
+ * @param {string} word - The search query.
+ */
+function fillFilteredTasksIds(word) {
   tasks.forEach((e) => {
     if (isMatch(e, word)) {
       let id = e.container.replace("-con", "") + `-card-${e.id}`;
@@ -251,7 +409,14 @@ function fillFilteredTasksIds(e, word) {
   });
 }
 
-// check if the task match the search word in title, description and subtasks
+/**
+ * Checks if a task matches the search query in its title, description, or subtasks.
+ *
+ * @function isMatch
+ * @param {Object} obj - The task object.
+ * @param {string} word - The search query.
+ * @returns {boolean} `true` if the task matches; otherwise, `false`.
+ */
 function isMatch(obj, word) {
   let title = obj.title.toLowerCase().includes(word.toLowerCase());
   let description = obj.description.toLowerCase().includes(word.toLowerCase());
@@ -259,7 +424,14 @@ function isMatch(obj, word) {
   return title || description || yourNameArray;
 }
 
-// check if subtask match the search word
+/**
+ * Checks if any subtask of a task matches the search query.
+ *
+ * @function nameArray
+ * @param {Object} obj - The task object.
+ * @param {string} word - The search query.
+ * @returns {boolean} `true` if a subtask matches; otherwise, `false`.
+ */
 function nameArray(obj, word) {
   output = false;
   obj.subtasks.forEach((e) => {
@@ -270,7 +442,17 @@ function nameArray(obj, word) {
   return output;
 }
 
-// delete the task and close the card
+/**
+ * Deletes a task and updates the board.
+ *
+ * Workflow:
+ * 1. Sends a delete request to the server for the specified task.
+ * 2. Closes the task card view and reloads the board.
+ *
+ * @async
+ * @function deleteCard
+ * @param {number} id - The ID of the task to delete.
+ */
 async function deleteCard(id) {
   token = await activeUser()
   await deleteItem("task", {"id": id}, token);
@@ -279,7 +461,16 @@ async function deleteCard(id) {
   renderBoardSegments();
 }
 
-// render the Edit Card
+/**
+ * Opens a task card in edit mode.
+ *
+ * Workflow:
+ * 1. Prefills the edit form with task details.
+ * 2. Allows the user to modify the task.
+ *
+ * @function editCard
+ * @param {Object} e - The task object to edit.
+ */
 function editCard(e) {
   docID("main-board-card").innerHTML = "";
   new Img("main-board-card", "card-close", "card-close", "../assets/img/close.png");
@@ -309,7 +500,16 @@ function editUrgency(e) {
   e.priority == "Low" ? activeUrgency("btn-green") : "";
 }
 
-// select the contacts in the menu
+/**
+ * Marks the associated contacts as selected in the menu.
+ *
+ * Workflow:
+ * 1. Iterates through the `associates` array in the task object.
+ * 2. Sets the associated checkboxes to checked and adds the "active-list" class to their containers.
+ *
+ * @function checkTheBox
+ * @param {Object} e - The task object containing the associated contacts.
+ */
 function checkTheBox(e) {
   e.associates.forEach((ele) => {
     docID(`check-${ele}`).checked = true;
@@ -317,7 +517,17 @@ function checkTheBox(e) {
   });
 }
 
-// select the category in the menu
+/**
+ * Marks the associated categories as selected in the menu.
+ *
+ * Workflow:
+ * 1. Iterates through the global `categorys` array.
+ * 2. Checks if each category ID is included in the task's `category` array.
+ * 3. Sets the corresponding checkboxes to checked and adds the "active-list" class to their containers.
+ *
+ * @function checkTheCategory
+ * @param {Object} e - The task object containing the associated categories.
+ */
 function checkTheCategory(e) {
   categorys.forEach((element) => {
     if (e.category.includes(element.id)) {
@@ -327,7 +537,17 @@ function checkTheCategory(e) {
   });
 }
 
-// render the subtasks
+/**
+ * Renders the subtasks for editing.
+ *
+ * Workflow:
+ * 1. Clears the `subtask` array.
+ * 2. Copies the subtasks from the task object into the `subtask` array.
+ * 3. Calls `subtaskListRender` to display the updated subtasks in the UI.
+ *
+ * @function addEditSubtasks
+ * @param {Object} e - The task object containing the subtasks to render.
+ */
 function addEditSubtasks(e) {
   subtask = [];
   e.subtasks.forEach((ele) => {
@@ -336,7 +556,18 @@ function addEditSubtasks(e) {
   subtaskListRender();
 }
 
-// update the task by the values
+/**
+ * Updates a task with new values from the edit form.
+ *
+ * Workflow:
+ * 1. Updates the task properties with form values.
+ * 2. Sends the updated task to the server.
+ * 3. Reloads tasks and rerenders the board.
+ *
+ * @async
+ * @function updateTasks
+ * @param {Object} e - The task object to update.
+ */
 async function updateTasks(e) {
   let urgency = theUrgency();
   theSelectors(".tasks-contacts");
@@ -357,7 +588,12 @@ async function updateTasks(e) {
   closeCard("main-card-div", "main-board-card");
 }
 
-//delete unnecessary parameters
+/**
+ * Removes unnecessary properties from a task object before updating it.
+ *
+ * @function deleteTasksParameters
+ * @param {Object} e - The task object to clean up.
+ */
 function deleteTasksParameters(e) {
   delete e.associates;
   delete e.assignedTo;
@@ -366,7 +602,13 @@ function deleteTasksParameters(e) {
   delete e.subtaskschecked;
 }
 
-// select the checked subtasks
+/**
+ * Updates the checked state of subtasks in the task object.
+ *
+ * @function editSubtaskchecked
+ * @param {Object} e - The task object to update.
+ * @returns {Array<string>} The updated checked state of the subtasks.
+ */
 function editSubtaskchecked(e) {
   checked = e.subtaskschecked;
   if (subtask.length > checked.length) {
@@ -377,7 +619,14 @@ function editSubtaskchecked(e) {
   return checked;
 }
 
-// update the subtasks
+/**
+ * Updates the subtasks with their titles and checked states.
+ *
+ * @function SubtaskUpdate
+ * @param {Array<string>} subtask - The updated subtask titles.
+ * @param {Object} e - The task object containing the original subtasks.
+ * @returns {Array<Object>} The updated subtasks.
+ */
 function SubtaskUpdate(subtask, e) {
   let news = []; 
   console.log('e.subtaskschecked :>> ', e.subtaskschecked);

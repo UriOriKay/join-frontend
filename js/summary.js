@@ -22,7 +22,20 @@ let images = [
   "../assets/img/urgent_summary.png",
 ];
 
-// initiation of the summary site
+/**
+ * Initializes the summary page by loading data and rendering elements.
+ *
+ * Workflow:
+ * 1. Checks if the user is logged in and retrieves the token.
+ * 2. Renders the header and navbar.
+ * 3. Generates a greeting message for the user.
+ * 4. Fetches the task summary data from the server.
+ * 5. Creates the summary boxes to display task statistics.
+ * 6. Marks the "Summary" link as active in the navbar.
+ *
+ * @async
+ * @function initSummary
+ */
 async function initSummary() {
   let token = await activeUser(); //check if user is logged in
   init(); //rencer Header and Navbar
@@ -33,14 +46,33 @@ async function initSummary() {
   setNavBarActive("summary-link"); // set summary in the navbar active
 }
 
-// render the greeting message
+/**
+ * Renders a personalized greeting message for the user.
+ *
+ * Workflow:
+ * 1. Determines the appropriate greeting based on the current time using `getGreeting`.
+ * 2. Displays the greeting and the user's name, unless the user is a guest.
+ *
+ * @function generateGreetingMessage
+ */
 function generateGreetingMessage() {
   let greeting = getGreeting(); // get the appropriate greeting by time
   new Div("greetings", "greetings-span", "font-t1", `${greeting}${active_user.name === "Guest" ? "" : ","}`);
   new Div("greetings", "greeting-name", "", active_user.name === "Guest" ? "" : active_user.name);
 }
 
-// get the appropriate greeting by time
+/**
+ * Returns a greeting message based on the current time of day.
+ *
+ * Workflow:
+ * - "Good Morning" for 6:00–11:59
+ * - "Good Afternoon" for 12:00–17:59
+ * - "Good Evening" for 18:00–20:59
+ * - "Good Night" for 21:00–5:59
+ *
+ * @function getGreeting
+ * @returns {string} The appropriate greeting message.
+ */
 function getGreeting() {
   const hour = new Date().getHours();
   if (hour >= 6 && hour < 12) return "Good Morning"; //good morning between 6 & 12
@@ -49,7 +81,17 @@ function getGreeting() {
   return "Good Night"; // good night between 21 & 6
 }
 
-
+/**
+ * Creates summary boxes to display task statistics.
+ *
+ * Workflow:
+ * 1. Clears the container for the summary boxes.
+ * 2. Iterates over the predefined number of items (`item_amount`).
+ * 3. Creates a new summary box for each item and adds it to the `summary_boxes` array.
+ * 4. Initializes the first summary box with specific content.
+ *
+ * @function createSummaryBoxes
+ */
 function createSummaryBoxes() {
   let summaryBox_div_id = "summary-box"; // storage the id of Container of the summary boxes
   docID(summaryBox_div_id).innerHTML = ""; // clear the container
@@ -61,17 +103,35 @@ function createSummaryBoxes() {
   summary_boxes[0].createFirstBox(summaryBox_div_id);
 }
 
-// relocate to the Board
+/**
+ * Redirects the user to the board page.
+ *
+ * @function navToBoard
+ */
 function navToBoard() {
   window.location = "../html/board.html";
 }
 
-// change the paaramter of the summary boxes by the window size
+/**
+ * Adds an event listener to monitor window resizing and dynamically update the layout.
+ *
+ * - Calls `changeScreenView` whenever the window is resized.
+ *
+ * @event window#resize
+ */
+
 window.addEventListener("resize", function () {
   changeScreenView();
 });
-
-
+/**
+ * Updates the layout of the summary boxes based on the window size.
+ *
+ * Workflow:
+ * 1. Iterates through all summary boxes.
+ * 2. Adjusts the size and position of each box to fit the current screen size.
+ *
+ * @function changeScreenView
+ */
 function changeScreenView() {
   for (let index = 0; index < summary_boxes.length; index++) {
     const element = summary_boxes[index]; // get the current element

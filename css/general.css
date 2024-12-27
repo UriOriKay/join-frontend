@@ -131,6 +131,7 @@ header {
   top: 6vh;
   right: 70px;
   position: absolute;
+  z-index: 99;
 }
 
 .w-100 {

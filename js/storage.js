@@ -34,12 +34,26 @@ let segements_array = [
 
 const BASE_URL_2 = "http://127.0.0.1:8000/api/"
 
-// function to shorten document.getElementById
+/**
+ * Retrieves a DOM element by its ID.
+ *
+ * @function docID
+ * @param {string} id - The ID of the DOM element to retrieve.
+ * @returns {HTMLElement} The DOM element with the specified ID.
+ */
 function docID(id) {
   return document.getElementById(id);
 }
 
-// API Call for get
+/**
+ * Sends a GET request to the specified API endpoint.
+ *
+ * @async
+ * @function getItem
+ * @param {string} path - The API endpoint path.
+ * @param {string} token - The authorization token for the API request.
+ * @returns {Promise<Response>} The response from the API.
+ */
 async function getItem(path, token) {
   try{
     let response = await fetch(BASE_URL_2 + path + "/", {
@@ -60,7 +74,16 @@ async function getItem(path, token) {
   }
 }
 
-// API Call for post
+/**
+ * Sends a POST request to the specified API endpoint with the given data.
+ *
+ * @async
+ * @function postItem
+ * @param {string} path - The API endpoint path.
+ * @param {Object} data - The data to include in the POST request body.
+ * @param {string} token - The authorization token for the API request.
+ * @returns {Promise<Response>} The response from the API.
+ */
 async function postItem(path, data, token) {
   let response = await fetch(BASE_URL_2 + path + "/", {
     method: "POST",
@@ -73,6 +96,15 @@ async function postItem(path, data, token) {
   return (response);
 }
 
+/**
+ * Sends a login request to the API.
+ *
+ * @async
+ * @function loginItem
+ * @param {string} path - The API endpoint path.
+ * @param {Object} data - The login credentials to include in the POST request body.
+ * @returns {Promise<Response>} The response from the API.
+ */
 async function loginItem(path, data) {
   let response = await fetch(BASE_URL_2 + path + "/", {
     method: "POST",
@@ -84,7 +116,17 @@ async function loginItem(path, data) {
   return (response);
 }
 
-//API Call for put
+/**
+ * Sends a PUT request to the specified API endpoint with the given data.
+ *
+ * @async
+ * @function updateItem
+ * @param {string} path - The API endpoint path.
+ * @param {Object} data - The data to include in the PUT request body.
+ * @param {string} token - The authorization token for the API request.
+ * @returns {Promise<Response>} The response from the API.
+ */
+
 async function updateItem(path, data, token) {
   let response = await fetch(BASE_URL_2 + path + "/", {
     method: "PUT",
@@ -97,7 +139,16 @@ async function updateItem(path, data, token) {
   return (response);
 }
 
-// API Call for delete
+/**
+ * Sends a DELETE request to the specified API endpoint with the given data.
+ *
+ * @async
+ * @function deleteItem
+ * @param {string} path - The API endpoint path.
+ * @param {Object} data - The data to include in the DELETE request body.
+ * @param {string} token - The authorization token for the API request.
+ * @returns {Promise<Response>} The response from the API.
+ */
 async function deleteItem(path, data, token) {
   let response = await fetch(BASE_URL_2 + path + "/", {
     method: "DELETE",
@@ -110,12 +161,21 @@ async function deleteItem(path, data, token) {
   return (response);
 }
 
-// init function to set Header and navbar
+/**
+ * Initializes the application by setting the header and navbar.
+ *
+ * @async
+ * @function init
+ */
 async function init() {
   setHeader();
 }
 
-// render Header and start Navbar
+/**
+ * Renders the header and determines whether to display the guest or user version.
+ *
+ * @function setHeader
+ */
 function setHeader() {
   new Header();
   openNavMenu(); 
@@ -126,14 +186,23 @@ function setHeader() {
   }
 }
 
-// Header with Guest user
+/**
+ * Configures the header for a guest user by hiding user-specific elements.
+ *
+ * @function HeaderWithoutUser
+ */
 function HeaderWithoutUser() {
   docID("header-name-tag").style.display = "none";
   docID("navbar-con").style.display = "none";
   docID("navbar").style.justifyContent = "flex-end";
 }
 
-// Header with User
+/**
+ * Configures the header for a logged-in user by displaying user-specific elements and loading user data.
+ *
+ * @function HeaderWithUser
+ */
+
 function HeaderWithUser() {
   docID("header-name-tag").style.display = "flex";
   if (sessionStorage.getItem("name")) {allDataLoad("sessionStorage")}
@@ -143,12 +212,21 @@ function HeaderWithUser() {
   docID("navbar-con").style.display = "flex";
 }
 
-// set Categotry active at navbar
+/**
+ * Activates a specific navigation link in the navbar.
+ *
+ * @function setNavBarActive
+ * @param {string} con - The ID of the navigation link to activate.
+ */
 function setNavBarActive(con) {
   docID(con).classList.add("nav-active");
 }
 
-// render the navbar
+/**
+ * Renders the navigation menu with links and legal notices.
+ *
+ * @function openNavMenu
+ */
 function openNavMenu() {
   new Div("navbar", "navbar-con");
   new MenuLink("navbar-con", "summary");
@@ -160,24 +238,45 @@ function openNavMenu() {
   new Anchor("navbar-bottom","nav-legal","","../html/LegalNotice.html","Legal Notice");
 }
 
-// set name Tag in Header
+/**
+ * Updates the user's name tag in the header with the current active user.
+ *
+ * @function updateUserValues
+ */
 function updateUserValues() {
   docID("header-name-tag").innerHTML = active_user.name_tag;
 }
 
-// the the requiered message
+/**
+ * Displays a "This field is required" message for the specified element.
+ *
+ * @function isRequiered
+ * @param {string} id - The ID of the element where the message will be displayed.
+ */
+
 function isRequiered(id) {
   docID(id).innerHTML = /*html*/ `
     This field is required
   `;
 }
 
-//sort contacts by name
+/**
+ * Sorts the global `contacts` array alphabetically by name.
+ *
+ * @function sortContacts
+ */
+
 function sortContacts() {
   contacts.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 }
 
-// get the amount of tasks in each segement
+/**
+ * Calculates the number of tasks in each segment of the task board.
+ *
+ * @function getTasksAmounts
+ * @returns {Array<number>} An array of task counts for each segment.
+ */
+
 function getTasksAmounts() {
   task_amounts = [];
   segements_array.forEach((e) => {
@@ -186,7 +285,12 @@ function getTasksAmounts() {
   return task_amounts;
 }
 
-// check if all inputs are filled
+/**
+ * Checks whether all required contact input fields are filled.
+ *
+ * @function checkEmptyInputs
+ * @returns {boolean} `true` if all required fields are filled; otherwise, `false`.
+ */
 function checkEmptyInputs() {
   return (
     docID(`input-con-name-input-id`).value != "" &&
@@ -196,7 +300,12 @@ function checkEmptyInputs() {
 }
 
 
-// Template for new Contact
+/**
+ * Creates a template for a new contact and adds it to the global `contacts` array.
+ *
+ * @function addNewContact
+ */
+
 function addNewContact() {
   newContact = {
     name: "",
@@ -209,7 +318,13 @@ function addNewContact() {
   contacts.push(newContact);
 }
 
-// set Random Color for a new Contact
+/**
+ * Generates a random background color from the available colors for a new contact.
+ *
+ * @function setRandomColor
+ * @returns {string} A randomly selected color.
+ */
+
 function setRandomColor() {
   let randomNumber = Math.floor(Math.random() * backgroundcolors.length);
   let color = backgroundcolors[randomNumber];
@@ -217,13 +332,28 @@ function setRandomColor() {
 }
 
 
-// load all contacts
+/**
+ * Loads all contacts from the API and updates the global `contacts` array.
+ *
+ * @async
+ * @function loadContacts
+ * @param {string} token - The authorization token for the API request.
+ */
+
 async function loadContacts(token) {
   contacts = await getItem("contact", token);
   contacts = await contacts.json();
 }
 
-// load all tasks and clear Subtacks if there are none
+/**
+ * Loads all tasks from the API and updates the global `tasks` array.
+ * 
+ * Ensures that tasks without subtasks have empty arrays for subtasks and subtaskschecked.
+ *
+ * @async
+ * @function loadTasks
+ * @param {string} token - The authorization token for the API request.
+ */
 async function loadTasks(token) {
   response = await getItem("task", token);
   tasks = await response.json();
@@ -235,13 +365,32 @@ async function loadTasks(token) {
   })
 }
 
+/**
+ * Loads all categories from the API and updates the global `categorys` array.
+ *
+ * @async
+ * @function loadCategorys
+ * @param {string} token - The authorization token for the API request.
+ */
 // load all Categorys
 async function loadCategorys(token) {
   categorys = await getItem("category", token);
   categorys = await categorys.json();
 }
 
-// check if there is active user and return the token or redirect to index.html
+/**
+ * Checks if a user is logged in and redirects to the login page if not.
+ *
+ * Workflow:
+ * 1. Checks for a token in `localStorage` or `sessionStorage`.
+ * 2. Validates the token with the API using `activeCheck`.
+ * 3. If valid, loads user data; otherwise, redirects to the login page.
+ *
+ * @async
+ * @function activeUser
+ * @returns {string} The user's token if authentication is successful.
+ */
+
 async function activeUser() {
   if (localStorage.getItem("token") === null) {
     if (sessionStorage.getItem("token") === null) {
@@ -258,7 +407,15 @@ async function activeUser() {
   }
 }
 
-// check the user with the API
+/**
+ * Validates the user's token with the API.
+ *
+ * @async
+ * @function activeCheck
+ * @param {string} token - The user's token.
+ * @returns {boolean} `true` if the token is valid; otherwise, `false`.
+ */
+
 async function activeCheck(token) {
   try{ 
     response = await getItem("user/active", token);
@@ -271,14 +428,27 @@ async function activeCheck(token) {
   }
 }
 
-// save the user data in session or local storage
+/**
+ * Saves user data (token, name, and name tag) to the specified storage.
+ *
+ * @function allDataSave
+ * @param {Object} data - The user data to save.
+ * @param {string} storage - The storage type ("localStorage" or "sessionStorage").
+ */
+
 function allDataSave(data, storage) {
   eval(storage).setItem("token", data.token);
   eval(storage).setItem("name", data.name);
   eval(storage).setItem("name_tag", data.name_tag);
 }
 
-// load the user data from session or local storage
+/**
+ * Loads user data (token, name, and name tag) from the specified storage.
+ *
+ * @function allDataLoad
+ * @param {string} storage - The storage type ("localStorage" or "sessionStorage").
+ */
+
 function allDataLoad(storage) {
   active_user = {
     name: eval(storage).getItem("name"),
@@ -287,15 +457,29 @@ function allDataLoad(storage) {
   }
 }
 
+/**
+ * Toggles the visibility of the header dropdown menu.
+ *
+ * @function showHeaderDropdown
+ */
 
 function showHeaderDropdown() {
   docID("dropdown-menu").classList.toggle("show");
   isShown = !isShown;
 }
 
+/**
+ * Logs out the user by clearing their data from local and session storage and redirects to the login page.
+ *
+ * @function logout
+ */
 
 function logout() {
-  localStorage.removeItem("activeuser");
-  sessionStorage.removeItem("activeuser");
+  localStorage.removeItem("name");
+  localStorage.removeItem("name_tag");
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("name_tag");
+  sessionStorage.removeItem("name");
   window.location.href = "./index.html";
 }

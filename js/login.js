@@ -1,12 +1,29 @@
 let isPasswordShown = false;
 
-// Start the render process by define as login site
+/**
+ * Initializes the login process by rendering the login page elements.
+ *
+ * @async
+ * @function initLogin
+ */
+
 async function initLogin() {
   // await activeCheck(sessionStorage.getItem("token")) || await activeCheck(localStorage.getItem("token")) ? navToSummary() : null;
   renderLoginElements("Login");
 }
 
-// Render the login elements
+/**
+ * Renders the login or sign-up elements based on the specified action.
+ *
+ * Workflow:
+ * 1. Clears existing content using `clearContent`.
+ * 2. Sets the form submission behavior based on the action.
+ * 3. Creates input fields and buttons for the form.
+ * 4. Sets the headline and applies specific styles for the action.
+ *
+ * @function renderLoginElements
+ * @param {string} action - Specifies whether to render for "Login" or "Sign up".
+ */
 function renderLoginElements(action) {
   clearContent(); // empty the HTML container for render and rerender process
   setLoginFormSubmitBehaviour(action); // set onsubmit for the Login form
@@ -16,19 +33,42 @@ function renderLoginElements(action) {
   changeStyle(action); // individual style for the forms
 }
 
-// empty the HTML container for render and rerender process
+/**
+ * Clears the HTML container for rendering or re-rendering login elements.
+ *
+ * @function clearContent
+ */
+
 function clearContent() {
   docID("inputs-con").textContent = "";
   docID("login-form-button-group").textContent = "";
   docID("signup-back-btn") ? docID("signup-back-btn").remove() : "";
 }
 
-// set onsubmit for the Login form
+/**
+ * Sets the form submission behavior for the login form.
+ *
+ * - Disables the default form submission for the "Sign up" action.
+ *
+ * @function setLoginFormSubmitBehaviour
+ * @param {string} action - Specifies whether the form is for "Login" or "Sign up".
+ */
+
 function setLoginFormSubmitBehaviour(action) {
   action === "Sign up" ? docID("login-form").onsubmit = () => {return false} : null;
 }
 
-// create the input fields for the forms
+/**
+ * Creates the input fields for the login or sign-up form based on the action.
+ *
+ * Workflow:
+ * 1. For "Login": Creates email and password input fields and a "Remember Me" checkbox.
+ * 2. For "Sign up": Creates input fields for name, email, password, confirm password, and a privacy checkbox.
+ *
+ * @function createInputs
+ * @param {string} action - Specifies whether to create inputs for "Login" or "Sign up".
+ */
+
 function createInputs(action) {
   if (action === "Login") {
     createInput("email", "Email", "../assets/img/icon-mail.png", "input-con-email-input-id");
@@ -45,13 +85,32 @@ function createInputs(action) {
   }
 }
 
-// create input fields with image with help of Divinputimg class
+/**
+ * Creates an input field with an associated label and icon.
+ *
+ * @function createInput
+ * @param {string} inputType - The type of the input field (e.g., "text", "email", "password").
+ * @param {string} labalText - The label text for the input field.
+ * @param {string} imgSrc - The path to the icon image for the input field.
+ * @param {string} inputId - The ID for the input field.
+ */
+
 function createInput(inputType, labalText, imgSrc, inputId) {
   new Divinputimg("inputs-con", "imput-img-div", inputType, labalText, imgSrc, inputId, `${inputId}-div-id`);
   docID(inputId).required = true;
 }
 
-// create checkbox for privacy accept in Sign up
+/**
+ * Creates a checkbox for privacy policy acceptance during sign-up.
+ *
+ * Workflow:
+ * 1. Adds a required checkbox for privacy acceptance.
+ * 2. Appends a link to the privacy policy.
+ * 3. Adds an event listener to enable the form submission button when checked.
+ *
+ * @function createPrivacyCheckbox
+ */
+
 function createPrivacyCheckbox() {
   let custom_checkbox_accept_privacy = new CustomCheckbox("inputs-con", "checkbox-accept-privacy", "");
   docID("checkbox-accept-privacy").required = true;
@@ -61,7 +120,17 @@ function createPrivacyCheckbox() {
   docID("labelcheckbox-accept-privacy").onclick = checkAcception;  // make form sendable
 }
 
-// create buttons for Login and Sign up
+/**
+ * Creates the action buttons for the login or sign-up form.
+ *
+ * Workflow:
+ * 1. For "Login": Creates login and guest login buttons.
+ * 2. For "Sign up": Creates a sign-up button and a back button to return to the login form.
+ *
+ * @function createButtons
+ * @param {string} action - Specifies whether to create buttons for "Login" or "Sign up".
+ */
+
 function createButtons(action) {
   if (action === "Login") {
     createButton("login-button", "button font-t5",() => loginUser("Login"), "Log in");
@@ -74,22 +143,53 @@ function createButtons(action) {
   }
 }
 
-// create buttons with help of Button class
+/**
+ * Creates a button using the `Button` class.
+ *
+ * @function createButton
+ * @param {string} buttonId - The ID of the button.
+ * @param {string} buttonClass - The CSS classes for the button.
+ * @param {Function} onClickHandler - The function to execute on button click.
+ * @param {string} buttonText - The text to display on the button.
+ */
+
 function createButton(buttonId, buttonClass, onClickHandler, buttonText) {
   new Button("login-form-button-group", buttonId, buttonClass, onClickHandler, buttonText);
 }
 
-// set the headline for the forms
+/**
+ * Sets the headline text for the login or sign-up form.
+ *
+ * @function setLoginHeadline
+ * @param {string} action - The text to set as the headline (e.g., "Login" or "Sign up").
+ */
+
 function setLoginHeadline(action) {
   docID("login-headline").textContent = action;
 }
 
-// individual style for the forms
+/**
+ * Applies specific styles to the form based on the action ("Login" or "Sign up").
+ *
+ * @function changeStyle
+ * @param {string} action - Specifies whether the styles are for "Login" or "Sign up".
+ */
+
 function changeStyle(action) {
   action === "Sign up" ? changeStyleSignup() :  changeStyleLogin();
 }
 
-// individual style for the Sign up form
+/**
+ * Applies specific styles to the sign-up form.
+ *
+ * Workflow:
+ * 1. Hides the login button group.
+ * 2. Updates the logo, background color, and input container alignment.
+ * 3. Adds links for the privacy policy and legal notice.
+ *
+ * @function changeStyleSignup
+ */
+
 function changeStyleSignup() {
   docID("button-group").style.display = "none";
   docID("logo-login").src = "../assets/img/Logo-middle_white.png";
@@ -101,7 +201,16 @@ function changeStyleSignup() {
   addLinks("a"); // create the links for privacy policy and legal notice
 }
 
-// individual style for the Login form
+/**
+ * Applies specific styles to the login form.
+ *
+ * Workflow:
+ * 1. Displays the login button group.
+ * 2. Updates the logo, background color, and adds links for the privacy policy and legal notice.
+ *
+ * @function changeStyleLogin
+ */
+
 function changeStyleLogin() {
   docID("button-group").style.display = "flex";
   docID("login-main").style.backgroundColor = "var(--white)";
@@ -121,7 +230,13 @@ function navToSummary() {
   window.location = "../html/summary.html";
 }
 
-// store the input values and start the register process
+/**
+ * Collects input values from the sign-up form and initiates the registration process.
+ *
+ * @async
+ * @function saveInputValues
+ */
+
 async function saveInputValues() {
   let input_name_value = docID("input-con-name-input-id").value;
   let input_email_value = docID("input-con-email-input-id").value;
@@ -132,7 +247,24 @@ async function saveInputValues() {
   
 }
 
-// start the register process, by checking the input values and register by Api call
+/**
+ * Processes input values and registers a new user if validation passes.
+ *
+ * Workflow:
+ * 1. Validates the input values and password confirmation.
+ * 2. Sends a registration request to the API.
+ * 3. If successful: Renders the login form and displays a confirmation message.
+ * 4. If unsuccessful: Displays an error message.
+ *
+ * @async
+ * @function InputValuesToUser
+ * @param {string} input_name_value - The user's name.
+ * @param {string} input_email_value - The user's email address.
+ * @param {string} input_password_value - The user's password.
+ * @param {string} input_confirm_password_value - The user's confirmed password.
+ * @param {boolean} isCheckedBox - Whether the privacy checkbox is checked.
+ */
+
 async function InputValuesToUser(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox) {
   if (isCheckSignupForm(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox) 
     && isSamePassword(input_password_value, input_confirm_password_value)
@@ -150,7 +282,17 @@ async function InputValuesToUser(input_name_value, input_email_value, input_pass
   }
 }
 
-// check if the necessary input values are valid
+/**
+ * Validates the required fields in the sign-up form.
+ *
+ * @function isCheckSignupForm
+ * @param {string} input_name_value - The user's name.
+ * @param {string} input_email_value - The user's email address.
+ * @param {string} input_password_value - The user's password.
+ * @param {string} input_confirm_password_value - The user's confirmed password.
+ * @param {boolean} isCheckedBox - Whether the privacy checkbox is checked.
+ * @returns {boolean} `true` if all fields are valid; otherwise, `false`.
+ */
 function isCheckSignupForm(input_name_value, input_email_value, input_password_value, input_confirm_password_value, isCheckedBox) {
   return (
     input_name_value != "" &&
@@ -161,12 +303,30 @@ function isCheckSignupForm(input_name_value, input_email_value, input_password_v
   );
 }
 
-// check is the password and confirm password are the same
+/**
+ * Checks whether the password and confirm password fields match.
+ *
+ * @function isSamePassword
+ * @param {string} input_password_value - The user's password.
+ * @param {string} input_confirm_password_value - The user's confirmed password.
+ * @returns {boolean} `true` if the passwords match; otherwise, `false`.
+ */
+
 function isSamePassword(input_password_value, input_confirm_password_value) {
   return input_password_value == input_confirm_password_value;
 }
 
-// create the Json for the API call to register a new user and start Api Call
+/**
+ * Registers a new user by sending a JSON payload to the API.
+ *
+ * @async
+ * @function addNewUser
+ * @param {string} input_name_value - The user's name.
+ * @param {string} input_email_value - The user's email address.
+ * @param {string} input_password_value - The user's password.
+ * @param {string} input_confirm_password_value - The user's confirmed password.
+ * @returns {Promise<Response>} The response from the API.
+ */
 async function addNewUser(input_name_value, input_email_value, input_password_value, input_confirm_password_value) {
   let newUser = {
     "name": input_name_value,
@@ -174,11 +334,17 @@ async function addNewUser(input_name_value, input_email_value, input_password_va
     "password": input_password_value,
     "repeated_password": input_confirm_password_value
   };
-    response = await postItem("user/register", newUser); // start Api Call
+    response = await loginItem("user/register", newUser); // start Api Call
     return response;
 }
 
-// init the login process, by store the input values and start the login process by checking is Guest Login
+/**
+ * Initiates the login process based on the action ("Login" or "Guest").
+ *
+ * @function loginUser
+ * @param {string} action - The login type ("Login" or "Guest").
+ */
+
 function loginUser(action) {
   active_user = "";
   let input_email_value = docID("input-con-email-input-id").value;
@@ -187,7 +353,21 @@ function loginUser(action) {
   action === "Login" ? handleLogin(input_email_value, input_password_value) : handleGuest();
 }
 
-// API Clall for login
+/**
+ * Sends a login request to the API and handles the response.
+ *
+ * Workflow:
+ * 1. Sends a login request with the provided email and password.
+ * 2. If successful:
+ *    - Saves the user data to local or session storage.
+ *    - Redirects to the summary page.
+ * 3. If unsuccessful: Displays an error message.
+ *
+ * @async
+ * @function handleLogin
+ * @param {string} input_email_value - The user's email address.
+ * @param {string} input_password_value - The user's password.
+ */
 async function handleLogin(input_email_value, input_password_value) {
   console.log('handle login :>> ');
   response = await loginItem("user/login", {"email": input_email_value, "password": input_password_value});
@@ -204,17 +384,31 @@ async function handleLogin(input_email_value, input_password_value) {
   }
 }
 
-// set the Parameter for Guest Login
+/**
+ * Initiates a guest login process with predefined credentials.
+ *
+ * @function handleGuest
+ */
 function handleGuest() {
   handleLogin("guest@guest.de", "guest");
 }
 
-//make form sendable
+/**
+ * Enables or disables the sign-up button based on the privacy checkbox state.
+ *
+ * @function checkAcception
+ */
 function checkAcception() {
   docID("signup-form-btn").disabled = !docID("checkbox-accept-privacy").checked;
 }
 
-//toogle password visiblity
+/**
+ * Toggles the visibility of a password input field.
+ *
+ * @function togglePassword
+ * @param {string} id - The ID of the password input field.
+ */
+
 function togglePassword(id) {
   let img_id = id + "-img";
   docID(id).type = isPasswordShown ? "text" : "password";
