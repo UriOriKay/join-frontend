@@ -272,6 +272,7 @@ async function InputValuesToUser(input_name_value, input_email_value, input_pass
       response = await addNewUser(input_name_value, input_email_value, input_password_value, input_confirm_password_value);
       if (response.status === 201) {
         renderLoginElements("Login");
+        console.log('response :>> ', response);
         new Confirmation("login-main", "You Signed Up successfully", false);
       }
       else {
@@ -347,7 +348,7 @@ async function addNewUser(input_name_value, input_email_value, input_password_va
 
 function loginUser(action) {
   active_user = "";
-  let input_email_value = docID("input-con-email-input-id").value;
+  let input_email_value = docID("input-con-email-input-id").value.toLowerCase();
   let input_password_value = docID("input-con-password-input-id").value;
 
   action === "Login" ? handleLogin(input_email_value, input_password_value) : handleGuest();
@@ -380,6 +381,7 @@ async function handleLogin(input_email_value, input_password_value) {
   } else {
     let response_user = await response.json();
     message = response_user.error;
+    docID('confirmation-id-div') ? docID('confirmation-id-div').remove() : "";
     new Confirmation("login-main", message, false);
   }
 }
