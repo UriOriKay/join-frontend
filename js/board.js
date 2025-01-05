@@ -632,7 +632,7 @@ function SubtaskUpdate(subtask, e) {
   console.log('e.subtaskschecked :>> ', e.subtaskschecked);
   for (let i = 0; i < subtask.length; i++) {
     news[i] = {
-      title: subtask[i],
+      name: subtask[i],
       checked: e.subtaskschecked[i] == "checked" ? true : false
     }
   }

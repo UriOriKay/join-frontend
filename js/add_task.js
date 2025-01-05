@@ -615,6 +615,7 @@ function updateSubtask(i, upadate_id) {
   value ? (subtask[i] = value, subtaskListRender()) : deleteSubtask(i);
 }
 
+
 /**
  * Resets the task creation form and clears all associated data.
  * 
